@@ -65,7 +65,7 @@ th{background:#0f3460;color:#e94560}
 @media(max-width:768px){.invasion-grid{grid-template-columns:1fr}}
 .hand-card{background:#0f3460;border-radius:6px;padding:.6rem;margin:.3rem 0;border-left:4px solid #e94560;display:flex;justify-content:space-between;align-items:center}
 .hand-card .card-name{font-weight:bold}
-.result-box{background:#0f3460;padding:.8rem;border-radius:6px;font-size:.9rem;color:#ffd700;overflow-y:auto;max-height:65vh}
+.result-box{background:#0f3460;padding:.8rem;border-radius:6px;font-size:.9rem;color:#ffd700}
 .filters{display:flex;gap:.5rem;margin-bottom:1rem;flex-wrap:wrap}
 .small{font-size:.85rem;color:#aaa}
 .invasion-split{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;align-items:start}
@@ -285,7 +285,7 @@ th{background:#0f3460;color:#e94560}
             <button class="secondary btn-sm" onclick="setDefenderLandAttr('無')" data-attr="無">無</button>
           </div>
         </div>
-        <div id="invasionResult" class="result-box" style="flex:1;overflow-y:auto;max-height:60vh"></div>
+        <div id="invasionResult" class="result-box"></div>
         <button class="action" onclick="resolveInvasion()" style="width:100%;font-size:1.1rem">戦闘結果を表示</button>
       </div>
     </div>
@@ -1227,6 +1227,10 @@ function resolveInvasion(){
   }
   
   result.innerHTML=`
+    <div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:.5rem;justify-content:center">
+      <div style="font-size:.7rem;color:#aaa;width:100%;text-align:center">侵略者: ${[...invaderSelected].map(id=>{const c=getDB().find(x=>x.id==id);return c?c.name:'?';}).join(' + ')||'未選択'}</div>
+      <div style="font-size:.7rem;color:#aaa;width:100%;text-align:center">防衛者: ${[...defenderSelected].map(id=>{const c=getDB().find(x=>x.id==id);return c?c.name:'?';}).join(' + ')||'未選択'}</div>
+    </div>
     <div class="vs-box">
       <div class="battle-creature">
         <div style="color:#e94560;font-weight:bold;font-size:.8rem">侵略者</div>
