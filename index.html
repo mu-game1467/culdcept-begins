@@ -1180,7 +1180,7 @@ function resolveInvasion2(){
     const finalHP=hp+landHPBonus;
     const destroyed=finalHP<=0;
     if(destroyed){fx.push('<span style="color:#e94560">破壊</span>');}
-    return {name:creature.name,at,finalDamage,destroyed?0:finalDamage,hp:Math.max(0,finalHP),baseHP,damage:destroyed?0:finalDamage,abilities,fx,useMagic,pierce:abilities.pierce||itemPierce,landHPBonus,element:creature.element,allNullified:false,instantDeath:itemInstantDeath||destroyed};
+    return {name:creature.name,at,finalDamage,baseAT:destroyed?0:finalDamage,hp:Math.max(0,finalHP),baseHP,damage:destroyed?0:finalDamage,abilities,fx,useMagic,pierce:abilities.pierce||itemPierce,landHPBonus,element:creature.element,allNullified:false,instantDeath:itemInstantDeath||destroyed};
   }
   
   const inv=calcSide(invFusedCreature,invItems,invSupport,defFusedCreature,false,true);
@@ -1612,7 +1612,7 @@ function resolveInvasion(){
     const finalHP=hp+landHPBonus;
     const destroyed=finalHP<=0;
     if(destroyed){fx.push('<span style="color:#e94560">破壊</span>');}
-    return {name:creature.name,at,finalDamage,destroyed?0:finalDamage,hp:Math.max(0,finalHP),baseHP,damage:destroyed?0:finalDamage,abilities,fx,useMagic,pierce:abilities.pierce||itemPierce,landHPBonus,element:creature.element,allNullified:false,instantDeath:itemInstantDeath||destroyed};
+    return {name:creature.name,at,finalDamage,baseAT:destroyed?0:finalDamage,hp:Math.max(0,finalHP),baseHP,damage:destroyed?0:finalDamage,abilities,fx,useMagic,pierce:abilities.pierce||itemPierce,landHPBonus,element:creature.element,allNullified:false,instantDeath:itemInstantDeath||destroyed};
   }
   
   const inv=calcSide(invFusedCreature,invItems,invSupport,defFusedCreature,false,true);
