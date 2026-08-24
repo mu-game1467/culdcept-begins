@@ -521,15 +521,14 @@ function renderRestrictions(restriction){
 }
 
 function renderCards(){
-const cards=getDB();const term=(document.getElementById('cardSearch').value||'').toLowerCase();
-let filtered=cards.filter(c=>{
-if(term&&!c.name.toLowerCase().includes(term))return false;
-if(cardFilter!=='__none__'){
-  if(['無','火','水','地','風'].includes(cardFilter)&&!(c.type==='クリーチャー'&&c.element===cardFilter))return false;
-  if(['武器','防具','道具','巻物'].includes(cardFilter)&&!(c.type==='アイテム'&&c.item_category===cardFilter))return false;
-}
-return true;
-});
+  const cards=getDB();
+  let filtered=cards.filter(c=>{
+    if(cardFilter!=='__none__'){
+      if(['無','火','水','地','風'].includes(cardFilter)&&!(c.type==='クリーチャー'&&c.element===cardFilter))return false;
+      if(['武器','防具','道具','巻物'].includes(cardFilter)&&!(c.type==='アイテム'&&c.item_category===cardFilter))return false;
+    }
+    return true;
+  });
 document.getElementById('cardGrid').innerHTML=filtered.map(c=>{
   const effects=getDisplayEffects(c);
   const showEffects=effects.map(e=>`<li>${e}</li>`).join('');
@@ -726,12 +725,10 @@ function renderBook(){
 }
 
 function renderBookCards(){
-  const term=normalizeSearch(document.getElementById('bookCardSearch').value||'');
   const book=getCurrentBook();
   const counts={};
   (book.cards||[]).forEach(id=>{counts[id]=(counts[id]||0)+1});
   let cards=getDB().filter(c=>{
-    if(term&&!normalizeSearch(c.name).includes(term))return false;
     if(bookCardFilter!=='__none__'){
       if(['無','火','水','地','風'].includes(bookCardFilter)&&!(c.type==='クリーチャー'&&c.element===bookCardFilter))return false;
       if(['武器','防具','道具','巻物'].includes(bookCardFilter)&&!(c.type==='アイテム'&&c.item_category===bookCardFilter))return false;
