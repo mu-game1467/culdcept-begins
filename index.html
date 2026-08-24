@@ -987,11 +987,15 @@ function renderInvasion2CardList(){
     cards=[];
   }
   document.getElementById('invasion2CardList').innerHTML=cards.map(c=>{
+    const effects=getDisplayEffects(c);
+    const showEffects=effects.slice(0,1).map(e=>`<li>${e}</li>`).join('');
     return `<div class="game-card ${getCardClass(c.type)}" draggable="true" ondragstart="invasion2DragStart(event,${c.id})" style="cursor:grab;border:1px solid #0f3460">
       ${c.icon?`<img src="https://appmedia.jp${c.icon}" style="width:100%;height:50px;object-fit:contain;background:#0f3460;border-radius:4px;margin-bottom:.2rem" loading="lazy">`:''}
       <div class="level">${c.cost}</div>
       <div class="name">${getCardIcon(c.type)} ${c.name}</div>
       <div class="type"><span class="tag tag-${getCardClass(c.type)}">${c.type}</span> <span class="tag tag-rarity">${c.rare}</span></div>
+      ${c.type==='クリーチャー'?`<div style="font-size:.65rem;color:#ccc;margin-top:.1rem">AT${c.at} / HP${c.hp}</div>`:''}
+      ${showEffects?`<div style="font-size:.5rem;color:#aaa;margin-top:.1rem"><ul style="padding-left:.5rem;margin-top:.05rem">${showEffects}</ul></div>`:''}
     </div>`;
   }).join('')||'<small class="small">カードなし</small>';
 }
@@ -1173,7 +1177,10 @@ function resolveInvasion2(){
         landHPBonus=invasion2Land*10;
       }
     }
-    return {name:creature.name,at,finalDamage,hp:hp+landHPBonus,baseHP,damage:finalDamage,abilities,fx,useMagic,pierce:abilities.pierce||itemPierce,landHPBonus,element:creature.element,allNullified:false,instantDeath:itemInstantDeath};
+    const finalHP=hp+landHPBonus;
+    const destroyed=finalHP<=0;
+    if(destroyed){fx.push('<span style="color:#e94560">破壊</span>');}
+    return {name:creature.name,at,finalDamage,destroyed?0:finalDamage,hp:Math.max(0,finalHP),baseHP,damage:destroyed?0:finalDamage,abilities,fx,useMagic,pierce:abilities.pierce||itemPierce,landHPBonus,element:creature.element,allNullified:false,instantDeath:itemInstantDeath||destroyed};
   }
   
   const inv=calcSide(invFusedCreature,invItems,invSupport,defFusedCreature,false,true);
@@ -1184,11 +1191,17 @@ function resolveInvasion2(){
   if(!invCreature&&!defCreature){
     resultText='<span style="color:#ffd700">● 未選択</span>';
   } else {
-    const defDefensive=def&&def.abilities&&def.abilities.defensive;
-    const invInstantDeath=inv&&(inv.instantDeath||(inv.abilities&&inv.abilities.instantDeath));
-    if(invInstantDeath){
+    const defDestroyed=def&&(def.destroyed||def.hp<=0);
+    const invDestroyed=inv&&(inv.destroyed||inv.hp<=0);
+    if(defDestroyed){
       resultText='<span style="color:#2ecc71">● 侵略成功</span>';
+    } else if(invDestroyed){
+      resultText='<span style="color:#e94560">● 侵略失敗</span>';
     } else {
+      const invInstantDeath=inv&&(inv.instantDeath||(inv.abilities&&inv.abilities.instantDeath));
+      if(invInstantDeath){
+        resultText='<span style="color:#2ecc71">● 侵略成功</span>';
+      } else {
       const defAttackReflect=def&&def.abilities&&def.abilities.attackReflect;
       const invUseMagic=inv&&inv.useMagic;
       const invForbidden=inv&&inv.abilities&&inv.abilities.forbidden;
@@ -1596,7 +1609,10 @@ function resolveInvasion(){
       }
     }
     
-    return {name:creature.name,at,finalDamage,hp:hp+landHPBonus,baseHP,damage:finalDamage,abilities,fx,useMagic,pierce:abilities.pierce||itemPierce,landHPBonus,element:creature.element,allNullified:false,instantDeath:itemInstantDeath};
+    const finalHP=hp+landHPBonus;
+    const destroyed=finalHP<=0;
+    if(destroyed){fx.push('<span style="color:#e94560">破壊</span>');}
+    return {name:creature.name,at,finalDamage,destroyed?0:finalDamage,hp:Math.max(0,finalHP),baseHP,damage:destroyed?0:finalDamage,abilities,fx,useMagic,pierce:abilities.pierce||itemPierce,landHPBonus,element:creature.element,allNullified:false,instantDeath:itemInstantDeath||destroyed};
   }
   
   const inv=calcSide(invFusedCreature,invItems,invSupport,defFusedCreature,false,true);
@@ -1607,11 +1623,17 @@ function resolveInvasion(){
   if(!invCreature||!defCreature){
     resultText=`<span style="color:#ffd700">● 未選択</span>`;
   } else {
-    const defDefensive=def&&def.abilities&&def.abilities.defensive;
-    const invInstantDeath=inv&&(inv.instantDeath||(inv.abilities&&inv.abilities.instantDeath));
-    if(invInstantDeath){
+    const defDestroyed=def&&(def.destroyed||def.hp<=0);
+    const invDestroyed=inv&&(inv.destroyed||inv.hp<=0);
+    if(defDestroyed){
       resultText=`<span style="color:#2ecc71">● 侵略成功</span>`;
+    } else if(invDestroyed){
+      resultText=`<span style="color:#e94560">● 侵略失敗</span>`;
     } else {
+      const invInstantDeath=inv&&(inv.instantDeath||(inv.abilities&&inv.abilities.instantDeath));
+      if(invInstantDeath){
+        resultText=`<span style="color:#2ecc71">● 侵略成功</span>`;
+      } else {
       const defAttackReflect=def&&def.abilities&&def.abilities.attackReflect;
       const invUseMagic=inv&&inv.useMagic;
       const invForbidden=inv&&inv.abilities&&inv.abilities.forbidden;
