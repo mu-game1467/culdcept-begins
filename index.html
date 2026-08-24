@@ -1185,8 +1185,8 @@ function resolveInvasion2(){
     resultText='<span style="color:#ffd700">● 未選択</span>';
   } else {
     const defDefensive=def&&def.abilities&&def.abilities.defensive;
-    const invInstantDeath=inv&&inv.instantDeath;
-    if(invInstantDeath && defDefensive){
+    const invInstantDeath=inv&&(inv.instantDeath||(inv.abilities&&inv.abilities.instantDeath));
+    if(invInstantDeath){
       resultText='<span style="color:#2ecc71">● 侵略成功</span>';
     } else {
       const defAttackReflect=def&&def.abilities&&def.abilities.attackReflect;
@@ -1352,7 +1352,7 @@ function renderDefenderSelected(){
 }
 
 function parseAbilityKeywords(ability){
-  const result={pierce:false,critical:false,criticalCondition:null,forbidden:null,support:false,magicCritical:false,itemDestroy:false,handCountDep:false,firstStrike:false,defensive:false,attackReflect:false};
+  const result={pierce:false,critical:false,criticalCondition:null,forbidden:null,support:false,magicCritical:false,itemDestroy:false,handCountDep:false,firstStrike:false,defensive:false,attackReflect:false,instantDeath:false};
   if(!ability||ability==='なし')return result;
   const rawText=ability;
   const text=cleanText(ability);
@@ -1364,6 +1364,7 @@ function parseAbilityKeywords(ability){
   if(rawText.includes('後手'))result.lastStrike=true;
   if(rawText.includes('防御型'))result.defensive=true;
   if(rawText.includes('攻撃反射'))result.attackReflect=true;
+  if(rawText.includes('即死'))result.instantDeath=true;
   const criticalMatch=rawText.match(/強打[^\[]*\[([^\]]+)\]/);
   if(rawText.includes('強打')&&!rawText.includes('魔術強打')){
     result.critical=true;
@@ -1607,8 +1608,8 @@ function resolveInvasion(){
     resultText=`<span style="color:#ffd700">● 未選択</span>`;
   } else {
     const defDefensive=def&&def.abilities&&def.abilities.defensive;
-    const invInstantDeath=inv&&inv.instantDeath;
-    if(invInstantDeath && defDefensive){
+    const invInstantDeath=inv&&(inv.instantDeath||(inv.abilities&&inv.abilities.instantDeath));
+    if(invInstantDeath){
       resultText=`<span style="color:#2ecc71">● 侵略成功</span>`;
     } else {
       const defAttackReflect=def&&def.abilities&&def.abilities.attackReflect;
