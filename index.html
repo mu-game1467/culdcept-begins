@@ -22,7 +22,7 @@ h2{color:#e94560;margin-bottom:.5rem;font-size:1.1rem;border-bottom:1px solid #0
 .game-card:hover{border-color:#e94560}
 .game-card .name{font-weight:bold;color:#fff;font-size:.8rem;margin-bottom:.1rem}
 .game-card .cost{color:#ffd700;font-weight:bold;font-size:.75rem}
-.game-card .type{font-size:.7rem;color:#aaa;margin-bottom:.1rem}
+.game-card .type{font-size:.7rem;color:#fff;margin-bottom:.1rem}
 .game-card .stats{font-size:.7rem;color:#ccc}
 .game-card .level{position:absolute;top:.2rem;right:.3rem;font-size:.6rem;background:#e94560;color:#fff;padding:.05rem .3rem;border-radius:3px}
 .game-card.creature{border-color:#4e9af1}
@@ -1227,11 +1227,11 @@ function resolveInvasion2(){
     const effects=getDisplayEffects(c);
     const showEffects=effects.slice(0,1).map(e=>`<li>${e}</li>`).join('');
     return `
-    ${c.icon?`<img src="https://appmedia.jp${c.icon}" style="width:30px;height:30px;object-fit:contain;background:#0f3460;border-radius:4px;margin-bottom:.2rem" loading="lazy">`:''}
-    <div style="font-size:.6rem;font-weight:bold;color:#fff;margin-bottom:.1rem">${getCardIcon(c.type)} ${c.name}</div>
-    <div style="font-size:.5rem;color:#aaa;margin-bottom:.1rem"><span class="tag tag-${getCardClass(c.type)}" style="font-size:.45rem;padding:.03rem .15rem">${c.type}</span> <span class="tag tag-rarity" style="font-size:.45rem;padding:.03rem .15rem">${c.rare}</span></div>
-    ${c.type==='クリーチャー'?`<div style="font-size:.55rem;color:#ccc;margin-bottom:.1rem">AT${c.at} / HP${c.hp}</div>`:''}
-    ${showEffects?`<div style="font-size:.5rem;color:#aaa"><ul style="padding-left:.6rem;margin-top:.05rem">${showEffects}</ul></div>`:''}
+    ${c.icon?`<img src="https://appmedia.jp${c.icon}" style="width:50px;height:50px;object-fit:contain;background:#0f3460;border-radius:4px;margin-bottom:.2rem" loading="lazy">`:''}
+    <div style="font-size:.7rem;font-weight:bold;color:#fff;margin-bottom:.1rem">${getCardIcon(c.type)} ${c.name}</div>
+    <div style="font-size:.6rem;color:#fff;margin-bottom:.1rem"><span class="tag tag-${getCardClass(c.type)}" style="font-size:.5rem;padding:.03rem .15rem">${c.type}</span> <span class="tag tag-rarity" style="font-size:.5rem;padding:.03rem .15rem">${c.rare}</span></div>
+    ${c.type==='クリーチャー'?`<div style="font-size:.65rem;color:#ccc;margin-bottom:.1rem">AT${c.at} / HP${c.hp}</div>`:''}
+    ${showEffects?`<div style="font-size:.55rem;color:#aaa"><ul style="padding-left:.6rem;margin-top:.05rem">${showEffects}</ul></div>`:''}
   `;
   }
   
@@ -1244,11 +1244,11 @@ function resolveInvasion2(){
         ${invEffects?`<div style="font-size:.55rem;color:#aaa;margin-top:.15rem;text-align:left">${invEffects}</div>`:''}
         ${destroyedInvItems.length?`<div style="font-size:.55rem;color:#e94560;margin-top:.15rem">破壊: ${destroyedInvItems.map(i=>i.name).join(', ')}</div>`:''}
         ${destroyedInvSupport.length?`<div style="font-size:.55rem;color:#e94560;margin-top:.15rem">援護破壊: ${destroyedInvSupport.map(s=>s.name).join(', ')}</div>`:''}
-        <div style="margin-top:.3rem;display:flex;gap:.2rem;flex-wrap:wrap;justify-content:center">
-          ${invFusedCreature&&invFusedCreature.id!==invCreature?.id?`<div style="background:#0f3460;border:1px solid #ffd700;border-radius:3px;padding:.2rem">${cardDetailHTML(invFusedCreature)}</div>`:''}
-          ${!invFusedCreature||invFusedCreature.id===invCreature?.id?`${invCreature?`<div style="background:#0f3460;border:1px solid #0f3460;border-radius:3px;padding:.2rem">${cardDetailHTML(invCreature)}</div>`:''}`:''}
-          ${invSupport.map(s=>`<div style="background:#0f3460;border:1px solid #4e9af1;border-radius:3px;padding:.2rem">${cardDetailHTML(s)}</div>`).join('')}
-          ${invItems.map(item=>`<div style="background:#0f3460;border:1px solid #0f3460;border-radius:3px;padding:.2rem">${cardDetailHTML(item)}</div>`).join('')}
+         <div style="margin-top:.3rem;display:flex;gap:.3rem;flex-wrap:wrap;justify-content:center">
+          ${invFusedCreature&&invFusedCreature.id!==invCreature?.id?`<div style="background:#0f3460;border:1px solid #ffd700;border-radius:3px;padding:.3rem">${cardDetailHTML(invFusedCreature)}</div>`:''}
+          ${!invFusedCreature||invFusedCreature.id===invCreature?.id?`${invCreature?`<div style="background:#0f3460;border:1px solid #0f3460;border-radius:3px;padding:.3rem">${cardDetailHTML(invCreature)}</div>`:''}`:''}
+          ${invSupport.map(s=>`<div style="background:#0f3460;border:1px solid #4e9af1;border-radius:3px;padding:.3rem">${cardDetailHTML(s)}</div>`).join('')}
+          ${invItems.map(item=>`<div style="background:#0f3460;border:1px solid #0f3460;border-radius:3px;padding:.3rem">${cardDetailHTML(item)}</div>`).join('')}
         </div>
       </div>
       <div style="font-size:1rem;color:#e94560;font-weight:bold;text-align:center;padding-top:1.5rem">VS</div>
@@ -1649,11 +1649,11 @@ function resolveInvasion(){
     const effects=getDisplayEffects(c);
     const showEffects=effects.slice(0,1).map(e=>`<li>${e}</li>`).join('');
     return `
-    ${c.icon?`<img src="https://appmedia.jp${c.icon}" style="width:30px;height:30px;object-fit:contain;background:#0f3460;border-radius:4px;margin-bottom:.2rem" loading="lazy">`:''}
-    <div style="font-size:.6rem;font-weight:bold;color:#fff;margin-bottom:.1rem">${getCardIcon(c.type)} ${c.name}</div>
-    <div style="font-size:.5rem;color:#aaa;margin-bottom:.1rem"><span class="tag tag-${getCardClass(c.type)}" style="font-size:.45rem;padding:.03rem .15rem">${c.type}</span> <span class="tag tag-rarity" style="font-size:.45rem;padding:.03rem .15rem">${c.rare}</span></div>
-    ${c.type==='クリーチャー'?`<div style="font-size:.55rem;color:#ccc;margin-bottom:.1rem">AT${c.at} / HP${c.hp}</div>`:''}
-    ${showEffects?`<div style="font-size:.5rem;color:#aaa"><ul style="padding-left:.6rem;margin-top:.05rem">${showEffects}</ul></div>`:''}
+    ${c.icon?`<img src="https://appmedia.jp${c.icon}" style="width:50px;height:50px;object-fit:contain;background:#0f3460;border-radius:4px;margin-bottom:.2rem" loading="lazy">`:''}
+    <div style="font-size:.7rem;font-weight:bold;color:#fff;margin-bottom:.1rem">${getCardIcon(c.type)} ${c.name}</div>
+    <div style="font-size:.6rem;color:#fff;margin-bottom:.1rem"><span class="tag tag-${getCardClass(c.type)}" style="font-size:.5rem;padding:.03rem .15rem">${c.type}</span> <span class="tag tag-rarity" style="font-size:.5rem;padding:.03rem .15rem">${c.rare}</span></div>
+    ${c.type==='クリーチャー'?`<div style="font-size:.65rem;color:#ccc;margin-bottom:.1rem">AT${c.at} / HP${c.hp}</div>`:''}
+    ${showEffects?`<div style="font-size:.55rem;color:#aaa"><ul style="padding-left:.6rem;margin-top:.05rem">${showEffects}</ul></div>`:''}
   `;
   }
   
@@ -1670,11 +1670,11 @@ function resolveInvasion(){
         ${invEffects?`<div style="font-size:.55rem;color:#aaa;margin-top:.15rem;text-align:left">${invEffects}</div>`:''}
         ${destroyedInvItems.length?`<div style="font-size:.55rem;color:#e94560;margin-top:.15rem">破壊: ${destroyedInvItems.map(i=>i.name).join(', ')}</div>`:''}
         ${destroyedInvSupport.length?`<div style="font-size:.55rem;color:#e94560;margin-top:.15rem">援護破壊: ${destroyedInvSupport.map(s=>s.name).join(', ')}</div>`:''}
-        <div style="margin-top:.3rem;display:flex;gap:.2rem;flex-wrap:wrap;justify-content:center">
-          ${invFusedCreature&&invFusedCreature.id!==invCreature?.id?`<div style="background:#0f3460;border:1px solid #ffd700;border-radius:3px;padding:.2rem">${cardDetailHTML(invFusedCreature)}</div>`:''}
-          ${!invFusedCreature||invFusedCreature.id===invCreature?.id?`${invCreature?`<div style="background:#0f3460;border:1px solid #0f3460;border-radius:3px;padding:.2rem">${cardDetailHTML(invCreature)}</div>`:''}`:''}
-          ${invSupport.map(s=>`<div style="background:#0f3460;border:1px solid #4e9af1;border-radius:3px;padding:.2rem">${cardDetailHTML(s)}</div>`).join('')}
-          ${invItems.map(item=>`<div style="background:#0f3460;border:1px solid #0f3460;border-radius:3px;padding:.2rem">${cardDetailHTML(item)}</div>`).join('')}
+        <div style="margin-top:.3rem;display:flex;gap:.3rem;flex-wrap:wrap;justify-content:center">
+          ${invFusedCreature&&invFusedCreature.id!==invCreature?.id?`<div style="background:#0f3460;border:1px solid #ffd700;border-radius:3px;padding:.3rem">${cardDetailHTML(invFusedCreature)}</div>`:''}
+          ${!invFusedCreature||invFusedCreature.id===invCreature?.id?`${invCreature?`<div style="background:#0f3460;border:1px solid #0f3460;border-radius:3px;padding:.3rem">${cardDetailHTML(invCreature)}</div>`:''}`:''}
+          ${invSupport.map(s=>`<div style="background:#0f3460;border:1px solid #4e9af1;border-radius:3px;padding:.3rem">${cardDetailHTML(s)}</div>`).join('')}
+          ${invItems.map(item=>`<div style="background:#0f3460;border:1px solid #0f3460;border-radius:3px;padding:.3rem">${cardDetailHTML(item)}</div>`).join('')}
         </div>
       </div>
       <div style="font-size:1rem;color:#e94560;font-weight:bold;text-align:center;padding-top:1.5rem">VS</div>
@@ -1685,11 +1685,11 @@ function resolveInvasion(){
         ${defEffects?`<div style="font-size:.55rem;color:#aaa;margin-top:.15rem;text-align:left">${defEffects}</div>`:''}
         ${destroyedDefItems.length?`<div style="font-size:.55rem;color:#e94560;margin-top:.15rem">破壊: ${destroyedDefItems.map(i=>i.name).join(', ')}</div>`:''}
         ${destroyedDefSupport.length?`<div style="font-size:.55rem;color:#e94560;margin-top:.15rem">援護破壊: ${destroyedDefSupport.map(s=>s.name).join(', ')}</div>`:''}
-        <div style="margin-top:.3rem;display:flex;gap:.2rem;flex-wrap:wrap;justify-content:center">
-          ${defFusedCreature&&defFusedCreature.id!==defCreature?.id?`<div style="background:#0f3460;border:1px solid #ffd700;border-radius:3px;padding:.2rem">${cardDetailHTML(defFusedCreature)}</div>`:''}
-          ${!defFusedCreature||defFusedCreature.id===defCreature?.id?`${defCreature?`<div style="background:#0f3460;border:1px solid #0f3460;border-radius:3px;padding:.2rem">${cardDetailHTML(defCreature)}</div>`:''}`:''}
-          ${defSupport.map(s=>`<div style="background:#0f3460;border:1px solid #4e9af1;border-radius:3px;padding:.2rem">${cardDetailHTML(s)}</div>`).join('')}
-          ${defItems.map(item=>`<div style="background:#0f3460;border:1px solid #0f3460;border-radius:3px;padding:.2rem">${cardDetailHTML(item)}</div>`).join('')}
+        <div style="margin-top:.3rem;display:flex;gap:.3rem;flex-wrap:wrap;justify-content:center">
+          ${defFusedCreature&&defFusedCreature.id!==defCreature?.id?`<div style="background:#0f3460;border:1px solid #ffd700;border-radius:3px;padding:.3rem">${cardDetailHTML(defFusedCreature)}</div>`:''}
+          ${!defFusedCreature||defFusedCreature.id===defCreature?.id?`${defCreature?`<div style="background:#0f3460;border:1px solid #0f3460;border-radius:3px;padding:.3rem">${cardDetailHTML(defCreature)}</div>`:''}`:''}
+          ${defSupport.map(s=>`<div style="background:#0f3460;border:1px solid #4e9af1;border-radius:3px;padding:.3rem">${cardDetailHTML(s)}</div>`).join('')}
+          ${defItems.map(item=>`<div style="background:#0f3460;border:1px solid #0f3460;border-radius:3px;padding:.3rem">${cardDetailHTML(item)}</div>`).join('')}
         </div>
       </div>
     </div>
