@@ -1,4 +1,28 @@
-﻿<!DOCTYPE html>
+<div style="display:flex;gap:.2rem;margin-bottom:.3rem;flex-wrap:wrap">
+    <button class="secondary btn-sm" onclick="setCardFilter('')" id="cardBtn-ALL" style="font-size:.7rem;padding:.2rem .3rem">ALL</button>
+    <button class="secondary btn-sm" onclick="setCardFilter('無')" id="cardBtn-無" style="font-size:.7rem;padding:.2rem .3rem">無</button>
+    <button class="secondary btn-sm" onclick="setCardFilter('火')" id="cardBtn-火" style="font-size:.7rem;padding:.2rem .3rem">火</button>
+    <button class="secondary btn-sm" onclick="setCardFilter('水')" id="cardBtn-水" style="font-size:.7rem;padding:.2rem .3rem">水</button>
+    <button class="secondary btn-sm" onclick="setCardFilter('地')" id="cardBtn-地" style="font-size:.7rem;padding:.2rem .3rem">地</button>
+    <button class="secondary btn-sm" onclick="setCardFilter('風')" id="cardBtn-風" style="font-size:.7rem;padding:.2rem .3rem">風</button>
+    <button class="secondary btn-sm" onclick="setCardFilter('武器')" id="cardBtn-武器" style="font-size:.7rem;padding:.2rem .3rem">武器</button>
+    <button class="secondary btn-sm" onclick="setCardFilter('防具')" id="cardBtn-防具" style="font-size:.7rem;padding:.2rem .3rem">防具</button>
+    <button class="secondary btn-sm" onclick="setCardFilter('道具')" id="cardBtn-道具" style="font-size:.7rem;padding:.2rem .3rem">道具</button>
+    <button class="secondary btn-sm" onclick="setCardFilter('巻物')" id="cardBtn-巻物" style="font-size:.7rem;padding:.2rem .3rem">巻物</button>
+  </div>
+  <div id="cardGrid" class="card-grid"></div><div style="display:flex;gap:.2rem;margin-bottom:.3rem;flex-wrap:wrap">
+            <button class="secondary btn-sm" onclick="setBookCardFilter('')" id="bookCardBtn-ALL" style="font-size:.7rem;padding:.2rem .3rem">ALL</button>
+            <button class="secondary btn-sm" onclick="setBookCardFilter('無')" id="bookCardBtn-無" style="font-size:.7rem;padding:.2rem .3rem">無</button>
+            <button class="secondary btn-sm" onclick="setBookCardFilter('火')" id="bookCardBtn-火" style="font-size:.7rem;padding:.2rem .3rem">火</button>
+            <button class="secondary btn-sm" onclick="setBookCardFilter('水')" id="bookCardBtn-水" style="font-size:.7rem;padding:.2rem .3rem">水</button>
+            <button class="secondary btn-sm" onclick="setBookCardFilter('地')" id="bookCardBtn-地" style="font-size:.7rem;padding:.2rem .3rem">地</button>
+            <button class="secondary btn-sm" onclick="setBookCardFilter('風')" id="bookCardBtn-風" style="font-size:.7rem;padding:.2rem .3rem">風</button>
+            <button class="secondary btn-sm" onclick="setBookCardFilter('武器')" id="bookCardBtn-武器" style="font-size:.7rem;padding:.2rem .3rem">武器</button>
+            <button class="secondary btn-sm" onclick="setBookCardFilter('防具')" id="bookCardBtn-防具" style="font-size:.7rem;padding:.2rem .3rem">防具</button>
+            <button class="secondary btn-sm" onclick="setBookCardFilter('道具')" id="bookCardBtn-道具" style="font-size:.7rem;padding:.2rem .3rem">道具</button>
+            <button class="secondary btn-sm" onclick="setBookCardFilter('巻物')" id="bookCardBtn-巻物" style="font-size:.7rem;padding:.2rem .3rem">巻物</button>
+          </div>
+          <div id="allCardsGrid" class="card-grid" style="max-height:400px;overflow-y:auto;margin-top:.3rem"></div>﻿<!DOCTYPE html>
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
@@ -78,6 +102,24 @@ th{background:#0f3460;color:#e94560}
 .modal-content{background:#16213e;border-radius:12px;padding:1.5rem;max-width:500px;width:90%;max-height:90vh;overflow-y:auto;position:relative;border:2px solid #e94560}
 .modal-close{position:absolute;top:.8rem;right:1rem;background:none;border:none;color:#fff;font-size:1.5rem;cursor:pointer}
 .modal-add{margin-top:1rem;width:100%}
+@media(max-width:768px){
+  .invasion-grid{grid-template-columns:1fr}
+  .invasion-split{grid-template-columns:1fr}
+  .flex{flex-direction:column}
+  .flex>*{min-width:100%}
+  main{padding:.5rem}
+  .panel{padding:.5rem}
+  h2{font-size:1rem}
+  .card-grid{grid-template-columns:repeat(auto-fill,minmax(120px,1fr))}
+  .mana-bar{height:40px}
+  nav button{padding:.4rem .6rem;font-size:.8rem}
+}
+@media(max-width:480px){
+  .card-grid{grid-template-columns:repeat(auto-fill,minmax(100px,1fr))}
+  .game-card{padding:.3rem}
+  .game-card .name{font-size:.75rem}
+}
+
 </style>
 </head>
 <body>
@@ -1251,6 +1293,51 @@ function resolveInvasion2(){
   `;
 }
 
+
+let bookCardFilter='';
+let cardFilter='';
+
+function setBookCardFilter(val){
+  if(bookCardFilter===val){bookCardFilter='__none__';}else{bookCardFilter=val;}
+  document.querySelectorAll('[id^="bookCardBtn-"]').forEach(b=>{
+    const isActive=b.id==='bookCardBtn-'+bookCardFilter;
+    const isNone=bookCardFilter==='__none__';
+    b.style.background=(isActive||isNone)?'#e94560':'#0f3460';
+  });
+  renderBookCards();
+}
+
+function setCardFilter(val){
+  if(cardFilter===val){cardFilter='__none__';}else{cardFilter=val;}
+  document.querySelectorAll('[id^="cardBtn-"]').forEach(b=>{
+    const isActive=b.id==='cardBtn-'+cardFilter;
+    const isNone=cardFilter==='__none__';
+    b.style.background=(isActive||isNone)?'#e94560':'#0f3460';
+  });
+  renderCards();
+}
+
+function getBookCardFilteredCards(){
+  let cards=getDB().filter(c=>c.type!=='スペル');
+  if(bookCardFilter!=='__none__'){
+    if(['無','火','水','地','風'].includes(bookCardFilter))cards=cards.filter(c=>c.type==='クリーチャー'&&c.element===bookCardFilter);
+    if(['武器','防具','道具','巻物'].includes(bookCardFilter))cards=cards.filter(c=>c.type==='アイテム'&&c.item_category===bookCardFilter);
+  } else {
+    cards=[];
+  }
+  return cards;
+}
+
+function getCardFilteredCards(){
+  let cards=getDB().filter(c=>c.type!=='スペル');
+  if(cardFilter!=='__none__'){
+    if(['無','火','水','地','風'].includes(cardFilter))cards=cards.filter(c=>c.type==='クリーチャー'&&c.element===cardFilter);
+    if(['武器','防具','道具','巻物'].includes(cardFilter))cards=cards.filter(c=>c.type==='アイテム'&&c.item_category===cardFilter);
+  } else {
+    cards=[];
+  }
+  return cards;
+}
 function setDefenderLand(lv){
   defenderLand=lv;
   document.querySelectorAll('#defenderLandButtons button').forEach(b=>{
