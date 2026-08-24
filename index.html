@@ -161,9 +161,10 @@ th{background:#0f3460;color:#e94560}
           <button class="secondary btn-sm" onclick="setBookCardFilter('武器')" id="bookCardBtn-武器" style="font-size:.7rem;padding:.2rem .3rem">武器</button>
           <button class="secondary btn-sm" onclick="setBookCardFilter('防具')" id="bookCardBtn-防具" style="font-size:.7rem;padding:.2rem .3rem">防具</button>
           <button class="secondary btn-sm" onclick="setBookCardFilter('道具')" id="bookCardBtn-道具" style="font-size:.7rem;padding:.2rem .3rem">道具</button>
-          <button class="secondary btn-sm" onclick="setBookCardFilter('巻物')" id="bookCardBtn-巻物" style="font-size:.7rem;padding:.2rem .3rem">巻物</button>
-        </div>
-        <div id="allCardsGrid" class="card-grid" style="max-height:400px;overflow-y:auto;margin-top:.3rem"></div>
+           <button class="secondary btn-sm" onclick="setBookCardFilter('巻物')" id="bookCardBtn-巻物" style="font-size:.7rem;padding:.2rem .3rem">巻物</button>
+           <button class="secondary btn-sm" onclick="setBookCardFilter('スペル')" id="bookCardBtn-スペル" style="font-size:.7rem;padding:.2rem .3rem">スペル</button>
+         </div>
+         <div id="allCardsGrid" class="card-grid" style="max-height:400px;overflow-y:auto;margin-top:.3rem"></div>
         <div style="margin-top:.5rem;color:#aaa;font-size:.85rem">クリックしてブックに追加</div>
       </div>
     </div>
@@ -183,6 +184,7 @@ th{background:#0f3460;color:#e94560}
     <button class="secondary btn-sm" onclick="setCardFilter('防具')" id="cardBtn-防具" style="font-size:.7rem;padding:.2rem .3rem">防具</button>
     <button class="secondary btn-sm" onclick="setCardFilter('道具')" id="cardBtn-道具" style="font-size:.7rem;padding:.2rem .3rem">道具</button>
     <button class="secondary btn-sm" onclick="setCardFilter('巻物')" id="cardBtn-巻物" style="font-size:.7rem;padding:.2rem .3rem">巻物</button>
+    <button class="secondary btn-sm" onclick="setCardFilter('スペル')" id="cardBtn-スペル" style="font-size:.7rem;padding:.2rem .3rem">スペル</button>
   </div>
   <div id="cardGrid" class="card-grid"></div>
 </section>
@@ -526,6 +528,7 @@ function renderCards(){
     if(cardFilter!=='__none__'){
       if(['無','火','水','地','風'].includes(cardFilter)&&!(c.type==='クリーチャー'&&c.element===cardFilter))return false;
       if(['武器','防具','道具','巻物'].includes(cardFilter)&&!(c.type==='アイテム'&&c.item_category===cardFilter))return false;
+      if(cardFilter==='スペル'&&c.type!=='スペル')return false;
     }
     return true;
   });
@@ -732,6 +735,7 @@ function renderBookCards(){
     if(bookCardFilter!=='__none__'){
       if(['無','火','水','地','風'].includes(bookCardFilter)&&!(c.type==='クリーチャー'&&c.element===bookCardFilter))return false;
       if(['武器','防具','道具','巻物'].includes(bookCardFilter)&&!(c.type==='アイテム'&&c.item_category===bookCardFilter))return false;
+      if(bookCardFilter==='スペル'&&c.type!=='スペル')return false;
     }
     return true;
   });
@@ -1292,10 +1296,11 @@ function setCardFilter(val){
 }
 
 function getBookCardFilteredCards(){
-  let cards=getDB().filter(c=>c.type!=='スペル');
+  let cards=getDB();
   if(bookCardFilter!=='__none__'){
     if(['無','火','水','地','風'].includes(bookCardFilter))cards=cards.filter(c=>c.type==='クリーチャー'&&c.element===bookCardFilter);
     if(['武器','防具','道具','巻物'].includes(bookCardFilter))cards=cards.filter(c=>c.type==='アイテム'&&c.item_category===bookCardFilter);
+    if(bookCardFilter==='スペル')cards=cards.filter(c=>c.type==='スペル');
   } else {
     cards=[];
   }
@@ -1303,10 +1308,11 @@ function getBookCardFilteredCards(){
 }
 
 function getCardFilteredCards(){
-  let cards=getDB().filter(c=>c.type!=='スペル');
+  let cards=getDB();
   if(cardFilter!=='__none__'){
     if(['無','火','水','地','風'].includes(cardFilter))cards=cards.filter(c=>c.type==='クリーチャー'&&c.element===cardFilter);
     if(['武器','防具','道具','巻物'].includes(cardFilter))cards=cards.filter(c=>c.type==='アイテム'&&c.item_category===cardFilter);
+    if(cardFilter==='スペル')cards=cards.filter(c=>c.type==='スペル');
   } else {
     cards=[];
   }
