@@ -66,6 +66,9 @@ th{background:#0f3460;color:#e94560}
 .hand-card{background:#0f3460;border-radius:6px;padding:.6rem;margin:.3rem 0;border-left:4px solid #e94560;display:flex;justify-content:space-between;align-items:center}
 .hand-card .card-name{font-weight:bold}
 .result-box{background:#0f3460;padding:.6rem;border-radius:6px;font-size:.85rem;color:#ffd700}
+   .drop-zone{background:#16213e;transition:all .2s}
+   .drop-zone.drag-over{border-color:#e94560;background:#1a1a2e}
+   .drop-zone .dropped-card{background:#0f3460;border:1px solid #4e9af1;border-radius:4px;padding:.2rem;margin:.2rem;display:inline-block;font-size:.7rem;cursor:pointer}
 .filters{display:flex;gap:.5rem;margin-bottom:1rem;flex-wrap:wrap}
 .small{font-size:.85rem;color:#aaa}
 .invasion-split{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;align-items:start}
@@ -84,9 +87,9 @@ th{background:#0f3460;color:#e94560}
     <nav>
       <button class="nav-btn active" data-target="book">ブック管理</button>
       <button class="nav-btn" data-target="cards">カード一覧</button>
-      <button class="nav-btn" data-target="expected">期待値計算</button>
-      <button class="nav-btn" data-target="invasion">侵略シミュ</button>
-      <button class="nav-btn" data-target="battle">勝率計算</button>
+      <button class="nav-btn" data-target="expected">期待値計算(未作成)</button>
+      <button class="nav-btn" data-target="invasion1">侵略シミュ1</button>
+      <button class="nav-btn" data-target="invasion2">侵略シミュ2</button>
     </nav>
   </div>
 </header>
@@ -162,7 +165,7 @@ th{background:#0f3460;color:#e94560}
 </section>
 
 <section id="expected">
-  <h2>期待値計算</h2>
+  <h2>期待値計算(未作成)</h2>
   <div class="panel">
     <div class="flex">
       <div>
@@ -205,7 +208,7 @@ th{background:#0f3460;color:#e94560}
   </div>
 </section>
 
-<section id="invasion">
+<section id="invasion1">
   <h2>侵略シミュレーター</h2>
   <div class="panel">
     <div class="invasion-grid">
@@ -295,34 +298,69 @@ th{background:#0f3460;color:#e94560}
     </div>
   </div>
 </section>
-
-<section id="battle">
-  <h2>勝率計算</h2>
+<section id="invasion2">
+  <h2>侵略シミュ2</h2>
   <div class="panel">
-    <div class="flex">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem">
       <div>
-        <label>クリーチャーA (攻撃側)</label>
-        <select id="creatureA" onchange="updateBattlePreview()"></select>
-        <label>攻撃力補正</label>
-        <input type="number" id="atkBonusA" value="0">
-        <label>防御力補正</label>
-        <input type="number" id="defBonusA" value="0">
+        <div style="display:flex;gap:.2rem;margin-bottom:.3rem;flex-wrap:wrap">
+          <button class="secondary btn-sm" onclick="toggleInvasion2Filter('無')" id="invader2Btn-無" style="font-size:.7rem;padding:.2rem .3rem">無</button>
+          <button class="secondary btn-sm" onclick="toggleInvasion2Filter('火')" id="invader2Btn-火" style="font-size:.7rem;padding:.2rem .3rem">火</button>
+          <button class="secondary btn-sm" onclick="toggleInvasion2Filter('水')" id="invader2Btn-水" style="font-size:.7rem;padding:.2rem .3rem">水</button>
+          <button class="secondary btn-sm" onclick="toggleInvasion2Filter('地')" id="invader2Btn-地" style="font-size:.7rem;padding:.2rem .3rem">地</button>
+          <button class="secondary btn-sm" onclick="toggleInvasion2Filter('風')" id="invader2Btn-風" style="font-size:.7rem;padding:.2rem .3rem">風</button>
+          <button class="secondary btn-sm" onclick="toggleInvasion2Filter('武器')" id="invader2Btn-武器" style="font-size:.7rem;padding:.2rem .3rem">武器</button>
+          <button class="secondary btn-sm" onclick="toggleInvasion2Filter('防具')" id="invader2Btn-防具" style="font-size:.7rem;padding:.2rem .3rem">防具</button>
+          <button class="secondary btn-sm" onclick="toggleInvasion2Filter('道具')" id="invader2Btn-道具" style="font-size:.7rem;padding:.2rem .3rem">道具</button>
+          <button class="secondary btn-sm" onclick="toggleInvasion2Filter('巻物')" id="invader2Btn-巻物" style="font-size:.7rem;padding:.2rem .3rem">巻物</button>
+        </div>
+        <div id="invasion2CardList" class="card-grid" style="max-height:300px;overflow-y:auto;margin-bottom:.5rem"></div>
       </div>
       <div>
-        <label>クリーチャーB (防衛側)</label>
-        <select id="creatureB" onchange="updateBattlePreview()"></select>
-        <label>攻撃力補正</label>
-        <input type="number" id="atkBonusB" value="0">
-        <label>防御力補正</label>
-        <input type="number" id="defBonusB" value="0">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:.3rem;margin-bottom:.3rem">
+          <div>
+            <div style="font-size:.7rem;color:#aaa;margin-bottom:.2rem">侵略者 クリーチャー</div>
+            <div id="invasion2InvaderCreature" class="drop-zone" data-type="invader" data-category="creature" style="min-height:60px;border:2px dashed #0f3460;border-radius:6px;padding:.3rem;text-align:center;font-size:.7rem;color:#aaa">ドロップ</div>
+          </div>
+          <div>
+            <div style="font-size:.7rem;color:#aaa;margin-bottom:.2rem">侵略者 アイテム</div>
+            <div id="invasion2InvaderItems" class="drop-zone" data-type="invader" data-category="items" style="min-height:60px;border:2px dashed #0f3460;border-radius:6px;padding:.3rem;text-align:center;font-size:.7rem;color:#aaa">ドロップ</div>
+          </div>
+          <div>
+            <div style="font-size:.7rem;color:#aaa;margin-bottom:.2rem">防衛者 クリーチャー</div>
+            <div id="invasion2DefenderCreature" class="drop-zone" data-type="defender" data-category="creature" style="min-height:60px;border:2px dashed #0f3460;border-radius:6px;padding:.3rem;text-align:center;font-size:.7rem;color:#aaa">ドロップ</div>
+          </div>
+          <div>
+            <div style="font-size:.7rem;color:#aaa;margin-bottom:.2rem">防衛者 アイテム</div>
+            <div id="invasion2DefenderItems" class="drop-zone" data-type="defender" data-category="items" style="min-height:60px;border:2px dashed #0f3460;border-radius:6px;padding:.3rem;text-align:center;font-size:.7rem;color:#aaa">ドロップ</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:.3rem;margin-bottom:.3rem">
+          <span style="font-size:.7rem;color:#aaa;white-space:nowrap">領地Lv</span>
+          <div style="display:flex;gap:.2rem;flex-wrap:wrap" id="invasion2LandButtons">
+            <button class="secondary btn-sm" onclick="setInvasion2Land(1)" data-lv="1" style="font-size:.7rem;padding:.15rem .3rem">Lv1</button>
+            <button class="secondary btn-sm" onclick="setInvasion2Land(2)" data-lv="2" style="font-size:.7rem;padding:.15rem .3rem">Lv2</button>
+            <button class="secondary btn-sm" onclick="setInvasion2Land(3)" data-lv="3" style="font-size:.7rem;padding:.15rem .3rem">Lv3</button>
+            <button class="secondary btn-sm" onclick="setInvasion2Land(4)" data-lv="4" style="font-size:.7rem;padding:.15rem .3rem">Lv4</button>
+            <button class="secondary btn-sm" onclick="setInvasion2Land(5)" data-lv="5" style="font-size:.7rem;padding:.15rem .3rem">Lv5</button>
+          </div>
+          <span style="font-size:.7rem;color:#aaa;white-space:nowrap">属性</span>
+          <div style="display:flex;gap:.2rem;flex-wrap:wrap" id="invasion2LandAttrButtons">
+            <button class="secondary btn-sm" onclick="setInvasion2LandAttr('火')" data-attr="火" style="font-size:.7rem;padding:.15rem .3rem">火</button>
+            <button class="secondary btn-sm" onclick="setInvasion2LandAttr('水')" data-attr="水" style="font-size:.7rem;padding:.15rem .3rem">水</button>
+            <button class="secondary btn-sm" onclick="setInvasion2LandAttr('地')" data-attr="地" style="font-size:.7rem;padding:.15rem .3rem">地</button>
+            <button class="secondary btn-sm" onclick="setInvasion2LandAttr('風')" data-attr="風" style="font-size:.7rem;padding:.15rem .3rem">風</button>
+            <button class="secondary btn-sm" onclick="setInvasion2LandAttr('無')" data-attr="無" style="font-size:.7rem;padding:.15rem .3rem">無</button>
+          </div>
+        </div>
+        <div id="invasion2Result" class="result-box" style="max-height:40vh;overflow-y:auto;font-size:.8rem;padding:.5rem"></div>
+        <button class="action" onclick="resolveInvasion2()" style="width:100%;font-size:.9rem;padding:.4rem;margin-top:.3rem">戦闘結果を表示</button>
       </div>
     </div>
-    <div class="chart-container">
-      <canvas id="battleCanvas" width="600" height="300"></canvas>
-    </div>
-    <div id="battleResult" class="result-box"></div>
   </div>
 </section>
+
+
 
 <div id="cardModal" class="modal-overlay" onclick="if(event.target===this)closeCardModal()">
   <div class="modal-content">
@@ -901,6 +939,312 @@ function toggleDefenderSelect(cardId){
   renderDefenderSelected();
   renderDefenderSearch();
   resolveInvasion();
+}
+
+
+let invasion2Filter='';
+let invasion2Land=1;let invasion2LandAttr='';
+let invasion2InvaderCreature=null;let invasion2InvaderItems=[];
+let invasion2DefenderCreature=null;let invasion2DefenderItems=[];
+
+function toggleInvasion2Filter(val){
+  if(invasion2Filter===val){invasion2Filter='__none__';}else{invasion2Filter=val;}
+  document.querySelectorAll('[id^="invader2Btn-"]').forEach(b=>{
+    const isActive=b.id==='invader2Btn-'+invasion2Filter;
+    const isNone=invasion2Filter==='__none__';
+    b.style.background=(isActive||isNone)?'#e94560':'#0f3460';
+  });
+  renderInvasion2CardList();
+}
+
+function renderInvasion2CardList(){
+  let cards=getDB().filter(c=>c.type!=='スペル');
+  if(invasion2Filter!=='__none__'){
+    if(['無','火','水','地','風'].includes(invasion2Filter))cards=cards.filter(c=>c.type==='クリーチャー'&&c.element===invasion2Filter);
+    if(['武器','防具','道具','巻物'].includes(invasion2Filter))cards=cards.filter(c=>c.type==='アイテム'&&c.item_category===invasion2Filter);
+  } else {
+    cards=[];
+  }
+  document.getElementById('invasion2CardList').innerHTML=cards.map(c=>{
+    return `<div class="game-card ${getCardClass(c.type)}" draggable="true" ondragstart="invasion2DragStart(event,${c.id})" style="cursor:grab;border:1px solid #0f3460">
+      ${c.icon?`<img src="https://appmedia.jp${c.icon}" style="width:100%;height:50px;object-fit:contain;background:#0f3460;border-radius:4px;margin-bottom:.2rem" loading="lazy">`:''}
+      <div class="level">${c.cost}</div>
+      <div class="name">${getCardIcon(c.type)} ${c.name}</div>
+      <div class="type"><span class="tag tag-${getCardClass(c.type)}">${c.type}</span> <span class="tag tag-rarity">${c.rare}</span></div>
+    </div>`;
+  }).join('')||'<small class="small">カードなし</small>';
+}
+
+function invasion2DragStart(event,cardId){
+  event.dataTransfer.setData('text/plain', cardId);
+  event.dataTransfer.effectAllowed='copy';
+}
+
+function setupInvasion2DropZone(el,type,category){
+  el.addEventListener('dragover',e=>{e.preventDefault();el.classList.add('drag-over');});
+  el.addEventListener('dragleave',()=>{el.classList.remove('drag-over');});
+  el.addEventListener('drop',e=>{
+    e.preventDefault();el.classList.remove('drag-over');
+    const cardId=parseInt(e.dataTransfer.getData('text/plain'));
+    const card=getDB().find(c=>c.id==cardId);
+    if(!card)return;
+    if(type==='invader'){
+      if(category==='creature'){invasion2InvaderCreature=card;}
+      else if(category==='items'){if(!invasion2InvaderItems.find(x=>x.id===card.id))invasion2InvaderItems.push(card);}
+    } else {
+      if(category==='creature'){invasion2DefenderCreature=card;}
+      else if(category==='items'){if(!invasion2DefenderItems.find(x=>x.id===card.id))invasion2DefenderItems.push(card);}
+    }
+    renderInvasion2DropZones();
+  });
+}
+
+function renderInvasion2DropZones(){
+  const renderCard=(c)=> `<span class="dropped-card" onclick="removeInvasion2Card('${c.id}')">${c.name} ×</span>`;
+  const invC=document.getElementById('invasion2InvaderCreature');
+  const invI=document.getElementById('invasion2InvaderItems');
+  const defC=document.getElementById('invasion2DefenderCreature');
+  const defI=document.getElementById('invasion2DefenderItems');
+  if(invC)invC.innerHTML=invasion2InvaderCreature?renderCard(invasion2InvaderCreature):'ドロップ';
+  if(invI)invI.innerHTML=invasion2InvaderItems.length?invasion2InvaderItems.map(renderCard).join(''):'ドロップ';
+  if(defC)defC.innerHTML=invasion2DefenderCreature?renderCard(invasion2DefenderCreature):'ドロップ';
+  if(defI)defI.innerHTML=invasion2DefenderItems.length?invasion2DefenderItems.map(renderCard).join(''):'ドロップ';
+}
+
+function removeInvasion2Card(cardId){
+  if(invasion2InvaderCreature&&invasion2InvaderCreature.id==cardId)invasion2InvaderCreature=null;
+  invasion2InvaderItems=invasion2InvaderItems.filter(x=>x.id!=cardId);
+  if(invasion2DefenderCreature&&invasion2DefenderCreature.id==cardId)invasion2DefenderCreature=null;
+  invasion2DefenderItems=invasion2DefenderItems.filter(x=>x.id!=cardId);
+  renderInvasion2DropZones();
+}
+
+function setInvasion2Land(lv){
+  invasion2Land=lv;
+  document.querySelectorAll('#invasion2LandButtons button').forEach(b=>{
+    b.style.background=parseInt(b.dataset.lv)===lv?'#e94560':'#0f3460';
+  });
+}
+
+function setInvasion2LandAttr(attr){
+  invasion2LandAttr=attr;
+  document.querySelectorAll('#invasion2LandAttrButtons button').forEach(b=>{
+    b.style.background=b.dataset.attr===attr?'#e94560':'#0f3460';
+  });
+}
+
+function resolveInvasion2(){
+  const result=document.getElementById('invasion2Result');
+  const invCards=[invasion2InvaderCreature,...invasion2InvaderItems].filter(Boolean);
+  const defCards=[invasion2DefenderCreature,...invasion2DefenderItems].filter(Boolean);
+  const invCreature=invCards.find(c=>c.type==='クリーチャー');
+  let invItems=invCards.filter(c=>c.type==='アイテム');
+  const invSupport=invCards.filter(c=>c.type==='クリーチャー'&&c!==invCreature);
+  const defCreature=defCards.find(c=>c.type==='クリーチャー');
+  let defItems=defCards.filter(c=>c.type==='アイテム');
+  const defSupport=defCards.filter(c=>c.type==='クリーチャー'&&c!==defCreature);
+  
+  const destroyedByDef=defItems.some(i=>parseItemEffectInfo(i.effect).destroyItem);
+  const destroyedByInv=invItems.some(i=>parseItemEffectInfo(i.effect).destroyItem);
+  const supportDestroyedByDef=defItems.some(i=>parseItemEffectInfo(i.effect).destroySupport);
+  const supportDestroyedByInv=invItems.some(i=>parseItemEffectInfo(i.effect).destroySupport);
+  const destroyedInvItems=destroyedByDef?[...invItems]:[];
+  const destroyedDefItems=destroyedByInv?[...defItems]:[];
+  const destroyedInvSupport=(destroyedByDef||supportDestroyedByDef)?[...invSupport]:[];
+  const destroyedDefSupport=(destroyedByInv||supportDestroyedByInv)?[...defSupport]:[];
+  if(destroyedByDef){invItems=[];invSupport.length=0;}
+  if(destroyedByInv){defItems=[];defSupport.length=0;}
+  if(supportDestroyedByDef)invSupport.length=0;
+  if(supportDestroyedByInv)defSupport.length=0;
+  
+  const hasSeabons=invCards.some(c=>c.id===102)||defCards.some(c=>c.id===102);
+  
+  function applyFusion(creature,support,itemsDestroyed,seabonsActive){
+    if(!creature||!support||!support.length)return creature;
+    if(itemsDestroyed||seabonsActive)return creature;
+    const cid=getDB().find(c=>c.id===creature.id)?.id;
+    const hasDragonfly=support.some(s=>s.id===40);
+    if(cid===120 && hasDragonfly){
+      const fused=getDB().find(c=>c.id===199);
+      if(fused)return {...fused,originalCreature:creature,supportCreature:support.find(s=>s.id===40)};
+    }
+    return creature;
+  }
+  const invFusedCreature=applyFusion(invCreature,invSupport,destroyedByDef||supportDestroyedByDef,hasSeabons);
+  const defFusedCreature=applyFusion(defCreature,defSupport,destroyedByInv||supportDestroyedByInv,hasSeabons);
+  
+  function calcSide(creature,items,support,enemyCreature,landBonusAllowed,isAttacker){
+    if(!creature)return null;
+    let at=creature.at||0;let hp=creature.hp||0;
+    const baseAT=at;const baseHP=hp;
+    const fx=[];
+    if(hasSeabons){
+      fx.push('<span style="color:#e94560">全ての効果無効化</span>');
+      let landHPBonus=0;
+      if(landBonusAllowed){
+        if(!invasion2LandAttr||invasion2LandAttr==='無'||creature.element===invasion2LandAttr){
+          landHPBonus=invasion2Land*10;
+        }
+      }
+      return {name:creature.name,at,hp:hp+landHPBonus,baseHP,damage:at,abilities:{},fx,useMagic:false,pierce:false,landHPBonus,element:creature.element,allNullified:true};
+    }
+    const abilities=getCreatureKeywords(creature);
+    if(abilities.support&&support.length){
+      support.forEach(s=>{
+        at+=s.at||0;hp+=s.hp||0;
+        fx.push(`<span style="color:#2ecc71">${s.name}の援護 AT+${s.at||0} HP+${s.hp||0}</span>`);
+      });
+    }
+    let useMagic=false;let magicDamage=0;let totalCritical=1;let itemPierce=false;let itemInstantDeath=false;
+    items.forEach(item=>{
+      const info=parseItemEffectInfo(item.effect);
+      if(info.type==='magic'){
+        useMagic=true;magicDamage+=info.damage;
+        fx.push(`<span style="color:#9b59b6">${item.name}の魔術 ${info.damage}ダメージ</span>`);
+        if(info.critical){totalCritical*=1.5;fx.push('<span style="color:#ffd700">魔術強打 1.5倍</span>')}
+      } else {
+        at=getItemAT(item,at,baseAT,baseHP);hp=getItemHP(item,baseAT,hp,baseHP);
+        fx.push(`<span style="color:#2ecc71">${item.name} AT+${info.at||0} HP+${info.hp||0}</span>`);
+        if(info.critical){totalCritical*=1.5;fx.push('<span style="color:#ffd700">強打 1.5倍</span>')}
+        if(info.pierce){itemPierce=true;fx.push(`<span style="color:#ffd700">${item.name}の貫通</span>`)}
+        if(info.instantDeath){itemInstantDeath=true;fx.push('<span style="color:#ffd700">即死</span>')}
+      }
+    });
+    if(abilities.pierce||itemPierce){fx.push('<span style="color:#ffd700">貫通</span>');}
+    if(!items.length&&abilities.forbidden){
+      useMagic=true;magicDamage+=abilities.forbidden;
+      fx.push(`<span style="color:#e94560">禁術 ${abilities.forbidden}ダメージ</span>`);
+    }
+    const handCount=0;
+    const handEffect=parseHandCountEffect(creature.effect,handCount);
+    if(handEffect){
+      if(handEffect.at!==null&&handEffect.at!==undefined)at=handEffect.at;
+      if(handEffect.hp!==null&&handEffect.hp!==undefined)hp=handEffect.hp;
+      fx.push(`<span style="color:#ffd700">手札効果 AT=${handEffect.at||0} HP=${handEffect.hp||0}</span>`);
+    }
+    const battleEffect=parseBattleEffect(creature.effect,isAttacker);
+    if(battleEffect){
+      if(battleEffect.at!==null&&battleEffect.at!==undefined&&battleEffect.at!==0)at+=battleEffect.at;
+      if(battleEffect.hp!==null&&battleEffect.hp!==undefined&&battleEffect.hp!==0)hp+=battleEffect.hp;
+      if(battleEffect.at||battleEffect.hp){
+        fx.push(`<span style="color:#ffd700">効果 AT+${battleEffect.at||0} HP${battleEffect.hp>=0?'+':''}${battleEffect.hp||0}</span>`);
+      }
+    }
+    const rawDamage=useMagic?magicDamage:at;
+    if(abilities.magicCritical && useMagic){
+      totalCritical*=1.5;
+      fx.push(`<span style="color:#ffd700">魔術強打 1.5倍 (${rawDamage}→${Math.floor(rawDamage*totalCritical)}ダメージ)</span>`);
+    }
+    if(abilities.critical&&checkCriticalCondition(abilities.criticalCondition,creature,enemyCreature)){
+      if(!useMagic){
+        totalCritical*=1.5;
+        fx.push(`<span style="color:#ffd700">強打 1.5倍 (${rawDamage}→${Math.floor(rawDamage*totalCritical)}ダメージ)</span>`);
+      }
+    }
+    const finalDamage=useMagic?Math.floor(magicDamage*totalCritical):Math.floor(at*totalCritical);
+    let landHPBonus=0;
+    if(landBonusAllowed && !abilities.pierce && !itemPierce){
+      if(!invasion2LandAttr||invasion2LandAttr==='無'||creature.element===invasion2LandAttr){
+        landHPBonus=invasion2Land*10;
+      }
+    }
+    return {name:creature.name,at,finalDamage,hp:hp+landHPBonus,baseHP,damage:finalDamage,abilities,fx,useMagic,pierce:abilities.pierce||itemPierce,landHPBonus,element:creature.element,allNullified:false,instantDeath:itemInstantDeath};
+  }
+  
+  const inv=calcSide(invFusedCreature,invItems,invSupport,defFusedCreature,false,true);
+  const attackerNullifiesLand=inv&&!inv.allNullified&&(inv.useMagic||inv.pierce||inv.abilities.forbidden);
+  const def=calcSide(defFusedCreature,defItems,defSupport,invFusedCreature,!attackerNullifiesLand,false);
+  
+  let resultText='';
+  if(!invCreature&&!defCreature){
+    resultText='<span style="color:#ffd700">● 未選択</span>';
+  } else {
+    const defDefensive=def&&def.abilities&&def.abilities.defensive;
+    const invInstantDeath=inv&&inv.instantDeath;
+    if(invInstantDeath && defDefensive){
+      resultText='<span style="color:#2ecc71">● 侵略成功</span>';
+    } else {
+      const defAttackReflect=def&&def.abilities&&def.abilities.attackReflect;
+      const invUseMagic=inv&&inv.useMagic;
+      const invForbidden=inv&&inv.abilities&&inv.abilities.forbidden;
+      if(defAttackReflect && !invUseMagic && !invForbidden){
+        const reflectedDamage=inv.damage||0;
+        if(reflectedDamage>=inv.hp){
+          resultText='<span style="color:#e94560">● 侵略失敗</span>';
+        } else {
+          resultText='<span style="color:#e94560">● 侵略失敗</span>';
+        }
+      } else {
+        const defFirstStrike=def&&def.abilities&&def.abilities.firstStrike;
+        const invFirstStrike=inv&&inv.abilities&&inv.abilities.firstStrike;
+        if(defFirstStrike&&!invFirstStrike){
+          if(def.damage>=inv.hp){
+            resultText='<span style="color:#e94560">● 侵略失敗</span>';
+          } else if(inv.damage>=def.hp){
+            resultText='<span style="color:#2ecc71">● 侵略成功</span>';
+          } else {
+            resultText='<span style="color:#e94560">● 侵略失敗</span>';
+          }
+        } else {
+          if(inv.damage>=def.hp){
+            resultText='<span style="color:#2ecc71">● 侵略成功</span>';
+          } else {
+            resultText='<span style="color:#e94560">● 侵略失敗</span>';
+          }
+        }
+      }
+    }
+  }
+  
+  const invEffects=inv?inv.fx.join('<br>'):'';
+  const defEffects=def?def.fx.join('<br>'):'';
+  
+  function cardDetailHTML(c){
+    const effects=getDisplayEffects(c);
+    const showEffects=effects.slice(0,1).map(e=>`<li>${e}</li>`).join('');
+    return `
+    ${c.icon?`<img src="https://appmedia.jp${c.icon}" style="width:30px;height:30px;object-fit:contain;background:#0f3460;border-radius:4px;margin-bottom:.2rem" loading="lazy">`:''}
+    <div style="font-size:.6rem;font-weight:bold;color:#fff;margin-bottom:.1rem">${getCardIcon(c.type)} ${c.name}</div>
+    <div style="font-size:.5rem;color:#aaa;margin-bottom:.1rem"><span class="tag tag-${getCardClass(c.type)}" style="font-size:.45rem;padding:.03rem .15rem">${c.type}</span> <span class="tag tag-rarity" style="font-size:.45rem;padding:.03rem .15rem">${c.rare}</span></div>
+    ${c.type==='クリーチャー'?`<div style="font-size:.55rem;color:#ccc;margin-bottom:.1rem">AT${c.at} / HP${c.hp}</div>`:''}
+    ${showEffects?`<div style="font-size:.5rem;color:#aaa"><ul style="padding-left:.6rem;margin-top:.05rem">${showEffects}</ul></div>`:''}
+  `;
+  }
+  
+  result.innerHTML=`
+    <div style="display:grid;grid-template-columns:1fr auto 1fr;gap:.3rem;align-items:start">
+      <div style="background:#16213e;border:1px solid #0f3460;border-radius:4px;padding:.4rem">
+        <div style="color:#e94560;font-weight:bold;font-size:.7rem;text-align:center">侵略者</div>
+        <div style="font-size:.9rem;text-align:center;margin:.2rem 0">${inv?inv.name:'なし'}${invFusedCreature&&invFusedCreature.id!==invCreature?.id?' <span style="font-size:.7rem;color:#ffd700">('+invFusedCreature.name+')</span>':''}</div>
+        <div style="font-size:.7rem;text-align:center">${inv?`AT ${inv.damage} / HP ${inv.hp}`:'未選択'}</div>
+        ${invEffects?`<div style="font-size:.55rem;color:#aaa;margin-top:.15rem;text-align:left">${invEffects}</div>`:''}
+        ${destroyedInvItems.length?`<div style="font-size:.55rem;color:#e94560;margin-top:.15rem">破壊: ${destroyedInvItems.map(i=>i.name).join(', ')}</div>`:''}
+        ${destroyedInvSupport.length?`<div style="font-size:.55rem;color:#e94560;margin-top:.15rem">援護破壊: ${destroyedInvSupport.map(s=>s.name).join(', ')}</div>`:''}
+        <div style="margin-top:.3rem;display:flex;gap:.2rem;flex-wrap:wrap;justify-content:center">
+          ${invFusedCreature&&invFusedCreature.id!==invCreature?.id?`<div style="background:#0f3460;border:1px solid #ffd700;border-radius:3px;padding:.2rem">${cardDetailHTML(invFusedCreature)}</div>`:''}
+          ${!invFusedCreature||invFusedCreature.id===invCreature?.id?`${invCreature?`<div style="background:#0f3460;border:1px solid #0f3460;border-radius:3px;padding:.2rem">${cardDetailHTML(invCreature)}</div>`:''}`:''}
+          ${invSupport.map(s=>`<div style="background:#0f3460;border:1px solid #4e9af1;border-radius:3px;padding:.2rem">${cardDetailHTML(s)}</div>`).join('')}
+          ${invItems.map(item=>`<div style="background:#0f3460;border:1px solid #0f3460;border-radius:3px;padding:.2rem">${cardDetailHTML(item)}</div>`).join('')}
+        </div>
+      </div>
+      <div style="font-size:1rem;color:#e94560;font-weight:bold;text-align:center;padding-top:1.5rem">VS</div>
+      <div style="background:#16213e;border:1px solid #0f3460;border-radius:4px;padding:.4rem">
+        <div style="color:#4e9af1;font-weight:bold;font-size:.7rem;text-align:center">防衛者</div>
+        <div style="font-size:.9rem;text-align:center;margin:.2rem 0">${def?def.name:'なし'}${defFusedCreature&&defFusedCreature.id!==defCreature?.id?' <span style="font-size:.7rem;color:#ffd700">('+defFusedCreature.name+')</span>':''}</div>
+        <div style="font-size:.7rem;text-align:center">${def?`AT ${def.damage} / HP ${def.hp} (Lv${invasion2Land})`:'未選択'}</div>
+        ${defEffects?`<div style="font-size:.55rem;color:#aaa;margin-top:.15rem;text-align:left">${defEffects}</div>`:''}
+        ${destroyedDefItems.length?`<div style="font-size:.55rem;color:#e94560;margin-top:.15rem">破壊: ${destroyedDefItems.map(i=>i.name).join(', ')}</div>`:''}
+        ${destroyedDefSupport.length?`<div style="font-size:.55rem;color:#e94560;margin-top:.15rem">援護破壊: ${destroyedDefSupport.map(s=>s.name).join(', ')}</div>`:''}
+        <div style="margin-top:.3rem;display:flex;gap:.2rem;flex-wrap:wrap;justify-content:center">
+          ${defFusedCreature&&defFusedCreature.id!==defCreature?.id?`<div style="background:#0f3460;border:1px solid #ffd700;border-radius:3px;padding:.2rem">${cardDetailHTML(defFusedCreature)}</div>`:''}
+          ${!defFusedCreature||defFusedCreature.id===defCreature?.id?`${defCreature?`<div style="background:#0f3460;border:1px solid #0f3460;border-radius:3px;padding:.2rem">${cardDetailHTML(defCreature)}</div>`:''}`:''}
+          ${defSupport.map(s=>`<div style="background:#0f3460;border:1px solid #4e9af1;border-radius:3px;padding:.2rem">${cardDetailHTML(s)}</div>`).join('')}
+          ${defItems.map(item=>`<div style="background:#0f3460;border:1px solid #0f3460;border-radius:3px;padding:.2rem">${cardDetailHTML(item)}</div>`).join('')}
+        </div>
+      </div>
+    </div>
+    <div style="margin-top:.4rem;font-size:.85rem;color:#ffd700;text-align:center"><strong>${resultText}</strong></div>
+  `;
 }
 
 function setDefenderLand(lv){
@@ -1551,7 +1895,7 @@ document.querySelectorAll('.nav-btn').forEach(btn=>{
     const section=document.getElementById(btn.dataset.target);
     if(section){
       section.classList.add('active');
-      if(btn.dataset.target==='invasion'){
+      if(btn.dataset.target==='invasion1'||btn.dataset.target==='invasion2'){
         renderSidePresetSelects();
       }
     }
@@ -1560,7 +1904,6 @@ document.querySelectorAll('.nav-btn').forEach(btn=>{
 
 window.addEventListener('DOMContentLoaded',()=>{
   renderRaceFilters();renderCards();renderSavedBooks();
-  populateBattleSelects();
   setDefenderLand(1);
   setDefenderLandAttr('');
   renderInvaderSelected();renderDefenderSelected();
@@ -1568,6 +1911,14 @@ window.addEventListener('DOMContentLoaded',()=>{
   renderBook();
   renderBookCards();
   renderSidePresetSelects();
+  renderInvasion2CardList();
+  setupInvasion2DropZone(document.getElementById('invasion2InvaderCreature'),'invader','creature');
+  setupInvasion2DropZone(document.getElementById('invasion2InvaderItems'),'invader','items');
+  setupInvasion2DropZone(document.getElementById('invasion2DefenderCreature'),'defender','creature');
+  setupInvasion2DropZone(document.getElementById('invasion2DefenderItems'),'defender','items');
+  renderInvasion2DropZones();
+  setInvasion2Land(1);
+  setInvasion2LandAttr('');
 });
 </script>
 
