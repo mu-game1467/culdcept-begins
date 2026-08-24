@@ -79,9 +79,9 @@ th{background:#0f3460;color:#e94560}
 .battle-creature .hp-bar{margin-top:.5rem}
 .chart-container{background:#16213e;border-radius:8px;padding:1rem;margin-top:1rem}
 .book-item{background:#0f3460;padding:.8rem;border-radius:6px;margin-bottom:.5rem;display:flex;justify-content:space-between;align-items:center}
-.mana-bar{display:flex;align-items:flex-end;gap:2px;height:60px;margin-top:.5rem}
-.mana-col{flex:1;background:#e94560;border-radius:2px 2px 0 0;position:relative;transition:height .3s;min-height:2px}
-.mana-col span{position:absolute;bottom:-18px;left:50%;transform:translateX(-50%);font-size:.7rem;color:#aaa}
+.mana-bar{display:flex;align-items:flex-end;gap:2px;height:60px;margin-top:.5rem;overflow-x:auto;padding-bottom:20px}
+.mana-col{flex:0 0 20px;background:#e94560;border-radius:2px 2px 0 0;position:relative;transition:height .3s;min-height:2px}
+.mana-col span{position:absolute;bottom:-18px;left:50%;transform:translateX(-50%);font-size:.6rem;color:#aaa;white-space:nowrap}
 .btn-sm{padding:.2rem .4rem;font-size:.75rem}
 .game-card ul{margin:.3rem 0;padding-left:1rem}
 .game-card li{margin-bottom:.15rem}
@@ -111,7 +111,9 @@ th{background:#0f3460;color:#e94560}
   .panel{padding:.5rem}
   h2{font-size:1rem}
   .card-grid{grid-template-columns:repeat(auto-fill,minmax(120px,1fr))}
-  .mana-bar{height:40px}
+  .mana-bar{height:40px;overflow-x:auto;padding-bottom:16px}
+  .mana-col{flex:0 0 16px}
+  .mana-col span{font-size:.55rem;bottom:-16px}
   nav button{padding:.4rem .6rem;font-size:.8rem}
 }
 @media(max-width:480px){
@@ -143,7 +145,7 @@ th{background:#0f3460;color:#e94560}
     <div class="flex">
       <div>
         <label>ブック名</label>
-        <input type="text" id="bookName" placeholder="例: 赤緑アグロ" oninput="onBookNameChange()">
+        <input type="text" id="bookName" placeholder="例: 地走り" oninput="onBookNameChange()">
         <button class="action" onclick="saveBook()">保存</button>
         <button class="secondary" onclick="clearBookForm()" style="margin-left:.5rem">クリア</button>
       </div>
