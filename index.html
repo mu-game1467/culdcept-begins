@@ -12,24 +12,24 @@ header h1{font-size:1.4rem;color:#e94560}
 nav{display:flex;gap:.5rem;margin-top:.5rem;flex-wrap:wrap}
 nav button{background:#0f3460;color:#fff;border:none;padding:.5rem 1rem;border-radius:4px;cursor:pointer;font-size:.9rem}
 nav button:hover,nav button.active{background:#e94560}
-main{padding:2rem;max-width:1400px;margin:0 auto}
+main{padding:1rem;max-width:1400px;margin:0 auto}
 section{display:none;animation:fadeIn .3s}
 section.active{display:block}
 @keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
-h2{color:#e94560;margin-bottom:1rem;font-size:1.2rem;border-bottom:1px solid #0f3460;padding-bottom:.5rem}
-.card-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:1rem}
-.game-card{background:#16213e;border-radius:8px;padding:.8rem;border:2px solid #0f3460;transition:transform .2s;cursor:pointer;position:relative}
-.game-card:hover{transform:translateY(-4px);border-color:#e94560}
-.game-card .name{font-weight:bold;color:#fff;font-size:.95rem;margin-bottom:.3rem}
-.game-card .cost{color:#ffd700;font-weight:bold}
-.game-card .type{font-size:.75rem;color:#aaa;margin-bottom:.3rem}
-.game-card .stats{font-size:.8rem;color:#ccc}
-.game-card .level{position:absolute;top:.4rem;right:.6rem;font-size:.7rem;background:#e94560;color:#fff;padding:.1rem .4rem;border-radius:3px}
+h2{color:#e94560;margin-bottom:.5rem;font-size:1.1rem;border-bottom:1px solid #0f3460;padding-bottom:.3rem}
+.card-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:.4rem}
+.game-card{background:#16213e;border-radius:6px;padding:.4rem;border:1px solid #0f3460;cursor:pointer;position:relative}
+.game-card:hover{border-color:#e94560}
+.game-card .name{font-weight:bold;color:#fff;font-size:.8rem;margin-bottom:.1rem}
+.game-card .cost{color:#ffd700;font-weight:bold;font-size:.75rem}
+.game-card .type{font-size:.7rem;color:#aaa;margin-bottom:.1rem}
+.game-card .stats{font-size:.7rem;color:#ccc}
+.game-card .level{position:absolute;top:.2rem;right:.3rem;font-size:.6rem;background:#e94560;color:#fff;padding:.05rem .3rem;border-radius:3px}
 .game-card.creature{border-color:#4e9af1}
 .game-card.spell{border-color:#9b59b6}
 .game-card.item{border-color:#2ecc71}
 .game-card.territory{border-color:#f39c12}
-.panel{background:#16213e;border-radius:8px;padding:1.5rem;margin-bottom:1.5rem;border:1px solid #0f3460}
+.panel{background:#16213e;border-radius:8px;padding:.8rem;margin-bottom:.8rem;border:1px solid #0f3460}
 .flex{display:flex;gap:1rem;flex-wrap:wrap}
 .flex>*{flex:1;min-width:280px}
 input,select,textarea{background:#0f3460;color:#fff;border:1px solid #1a1a2e;padding:.5rem;border-radius:4px;width:100%;margin-bottom:.5rem}
@@ -50,7 +50,7 @@ th{background:#0f3460;color:#e94560}
 .bar-bg{background:#0f3460;height:10px;border-radius:5px;overflow:hidden}
 .bar-fill{height:100%;background:#e94560;transition:width .3s}
 .vs-box{display:flex;flex-direction:column;gap:.5rem}
-.battle-creature{background:#16213e;border:2px solid #0f3460;border-radius:8px;padding:.8rem;text-align:center}
+.battle-creature{background:#16213e;border:1px solid #0f3460;border-radius:6px;padding:.6rem;text-align:center}
 .result-panel{background:#0f3460;padding:.8rem;border-radius:6px;overflow-y:auto;max-height:60vh}
 .battle-creature .hp-bar{margin-top:.5rem}
 .chart-container{background:#16213e;border-radius:8px;padding:1rem;margin-top:1rem}
@@ -58,14 +58,14 @@ th{background:#0f3460;color:#e94560}
 .mana-bar{display:flex;align-items:flex-end;gap:2px;height:60px;margin-top:.5rem}
 .mana-col{flex:1;background:#e94560;border-radius:2px 2px 0 0;position:relative;transition:height .3s;min-height:2px}
 .mana-col span{position:absolute;bottom:-18px;left:50%;transform:translateX(-50%);font-size:.7rem;color:#aaa}
-.btn-sm{padding:.3rem .6rem;font-size:.8rem}
+.btn-sm{padding:.2rem .4rem;font-size:.75rem}
 .game-card ul{margin:.3rem 0;padding-left:1rem}
 .game-card li{margin-bottom:.15rem}
-.invasion-grid{display:grid;grid-template-columns:1fr auto 1fr 1fr;gap:1rem;align-items:start}
+.invasion-grid{display:grid;grid-template-columns:1fr auto 1fr 1fr;gap:.5rem;align-items:start}
 @media(max-width:768px){.invasion-grid{grid-template-columns:1fr}}
 .hand-card{background:#0f3460;border-radius:6px;padding:.6rem;margin:.3rem 0;border-left:4px solid #e94560;display:flex;justify-content:space-between;align-items:center}
 .hand-card .card-name{font-weight:bold}
-.result-box{background:#0f3460;padding:.8rem;border-radius:6px;font-size:.9rem;color:#ffd700}
+.result-box{background:#0f3460;padding:.6rem;border-radius:6px;font-size:.85rem;color:#ffd700}
 .filters{display:flex;gap:.5rem;margin-bottom:1rem;flex-wrap:wrap}
 .small{font-size:.85rem;color:#aaa}
 .invasion-split{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;align-items:start}
@@ -210,83 +210,87 @@ th{background:#0f3460;color:#e94560}
   <div class="panel">
     <div class="invasion-grid">
       <div>
-        <label>侵略者 (プレイヤー1)</label>
-        <div style="display:flex;gap:.5rem;margin-bottom:.5rem">
-          <select id="invaderPresetSelect" onchange="loadSidePreset('invader')" style="flex:1">
-            <option value="">プリセットを選択...</option>
+        <label style="font-size:.8rem">侵略者 (プレイヤー1)</label>
+        <div style="display:flex;gap:.3rem;margin-bottom:.3rem">
+          <select id="invaderPresetSelect" onchange="loadSidePreset('invader')" style="flex:1;font-size:.8rem;padding:.3rem">
+            <option value="">プリセット...</option>
           </select>
-          <button class="secondary btn-sm" onclick="saveSidePreset('invader')">保存</button>
-          <button class="secondary btn-sm" onclick="overwriteSidePreset('invader')" style="background:#c0392b">上書き</button>
+          <button class="secondary btn-sm" onclick="saveSidePreset('invader')" style="font-size:.7rem;padding:.2rem .4rem">保存</button>
+          <button class="secondary btn-sm" onclick="overwriteSidePreset('invader')" style="background:#c0392b;font-size:.7rem;padding:.2rem .4rem">上書</button>
         </div>
-        <div style="display:flex;gap:.5rem;margin-bottom:.5rem">
-          <button class="secondary btn-sm" onclick="exportSidePresets()" style="flex:1">エクスポート</button>
-          <button class="secondary btn-sm" onclick="importSidePresets()" style="flex:1">インポート</button>
+        <div style="display:flex;gap:.3rem;margin-bottom:.3rem">
+          <button class="secondary btn-sm" onclick="exportSidePresets()" style="flex:1;font-size:.7rem;padding:.2rem .4rem">エクスポ</button>
+          <button class="secondary btn-sm" onclick="importSidePresets()" style="flex:1;font-size:.7rem;padding:.2rem .4rem">インポート</button>
         </div>
-        <div style="display:flex;gap:.3rem;margin-bottom:.5rem;flex-wrap:wrap">
-          <button class="secondary btn-sm" onclick="toggleInvaderFilter('無')" id="invaderBtn-無">無</button>
-          <button class="secondary btn-sm" onclick="toggleInvaderFilter('火')" id="invaderBtn-火">火</button>
-          <button class="secondary btn-sm" onclick="toggleInvaderFilter('水')" id="invaderBtn-水">水</button>
-          <button class="secondary btn-sm" onclick="toggleInvaderFilter('地')" id="invaderBtn-地">地</button>
-          <button class="secondary btn-sm" onclick="toggleInvaderFilter('風')" id="invaderBtn-風">風</button>
-          <button class="secondary btn-sm" onclick="toggleInvaderFilter('武器')" id="invaderBtn-武器">武器</button>
-          <button class="secondary btn-sm" onclick="toggleInvaderFilter('防具')" id="invaderBtn-防具">防具</button>
-          <button class="secondary btn-sm" onclick="toggleInvaderFilter('道具')" id="invaderBtn-道具">道具</button>
-          <button class="secondary btn-sm" onclick="toggleInvaderFilter('巻物')" id="invaderBtn-巻物">巻物</button>
+        <div style="display:flex;gap:.2rem;margin-bottom:.3rem;flex-wrap:wrap">
+          <button class="secondary btn-sm" onclick="toggleInvaderFilter('無')" id="invaderBtn-無" style="font-size:.7rem;padding:.2rem .3rem">無</button>
+          <button class="secondary btn-sm" onclick="toggleInvaderFilter('火')" id="invaderBtn-火" style="font-size:.7rem;padding:.2rem .3rem">火</button>
+          <button class="secondary btn-sm" onclick="toggleInvaderFilter('水')" id="invaderBtn-水" style="font-size:.7rem;padding:.2rem .3rem">水</button>
+          <button class="secondary btn-sm" onclick="toggleInvaderFilter('地')" id="invaderBtn-地" style="font-size:.7rem;padding:.2rem .3rem">地</button>
+          <button class="secondary btn-sm" onclick="toggleInvaderFilter('風')" id="invaderBtn-風" style="font-size:.7rem;padding:.2rem .3rem">風</button>
+          <button class="secondary btn-sm" onclick="toggleInvaderFilter('武器')" id="invaderBtn-武器" style="font-size:.7rem;padding:.2rem .3rem">武器</button>
+          <button class="secondary btn-sm" onclick="toggleInvaderFilter('防具')" id="invaderBtn-防具" style="font-size:.7rem;padding:.2rem .3rem">防具</button>
+          <button class="secondary btn-sm" onclick="toggleInvaderFilter('道具')" id="invaderBtn-道具" style="font-size:.7rem;padding:.2rem .3rem">道具</button>
+          <button class="secondary btn-sm" onclick="toggleInvaderFilter('巻物')" id="invaderBtn-巻物" style="font-size:.7rem;padding:.2rem .3rem">巻物</button>
         </div>
-        <div id="invaderSearchResults" class="card-grid" style="max-height:600px;overflow-y:auto;margin-bottom:.5rem"></div>
-        <label>使用するカードを選択</label>
-        <div id="invaderSelected" style="margin-bottom:.5rem"></div>
+        <div id="invaderSearchResults" class="card-grid" style="max-height:100px;overflow-y:auto;margin-bottom:.2rem"></div>
+        <div style="font-size:.7rem;color:#aaa;margin-bottom:.2rem">使用:</div>
+        <div id="invaderSelected" style="margin-bottom:.3rem"></div>
       </div>
-      <div style="font-size:1.5rem;color:#e94560;font-weight:bold;padding-top:2rem">VS</div>
+      <div style="font-size:1rem;color:#e94560;font-weight:bold;padding-top:.5rem">VS</div>
       <div>
-        <label>防衛者 (プレイヤー2)</label>
-        <div style="display:flex;gap:.5rem;margin-bottom:.5rem">
-          <select id="defenderPresetSelect" onchange="loadSidePreset('defender')" style="flex:1">
-            <option value="">プリセットを選択...</option>
+        <label style="font-size:.8rem">防衛者 (プレイヤー2)</label>
+        <div style="display:flex;gap:.3rem;margin-bottom:.3rem">
+          <select id="defenderPresetSelect" onchange="loadSidePreset('defender')" style="flex:1;font-size:.8rem;padding:.3rem">
+            <option value="">プリセット...</option>
           </select>
-          <button class="secondary btn-sm" onclick="saveSidePreset('defender')">保存</button>
-          <button class="secondary btn-sm" onclick="overwriteSidePreset('defender')" style="background:#c0392b">上書き</button>
+          <button class="secondary btn-sm" onclick="saveSidePreset('defender')" style="font-size:.7rem;padding:.2rem .4rem">保存</button>
+          <button class="secondary btn-sm" onclick="overwriteSidePreset('defender')" style="background:#c0392b;font-size:.7rem;padding:.2rem .4rem">上書</button>
         </div>
-        <div style="display:flex;gap:.5rem;margin-bottom:.5rem">
-          <button class="secondary btn-sm" onclick="exportSidePresets()" style="flex:1">エクスポート</button>
-          <button class="secondary btn-sm" onclick="importSidePresets()" style="flex:1">インポート</button>
+        <div style="display:flex;gap:.3rem;margin-bottom:.3rem">
+          <button class="secondary btn-sm" onclick="exportSidePresets()" style="flex:1;font-size:.7rem;padding:.2rem .4rem">エクスポ</button>
+          <button class="secondary btn-sm" onclick="importSidePresets()" style="flex:1;font-size:.7rem;padding:.2rem .4rem">インポート</button>
         </div>
-        <div style="display:flex;gap:.3rem;margin-bottom:.5rem;flex-wrap:wrap">
-          <button class="secondary btn-sm" onclick="toggleDefenderFilter('無')" id="defenderBtn-無">無</button>
-          <button class="secondary btn-sm" onclick="toggleDefenderFilter('火')" id="defenderBtn-火">火</button>
-          <button class="secondary btn-sm" onclick="toggleDefenderFilter('水')" id="defenderBtn-水">水</button>
-          <button class="secondary btn-sm" onclick="toggleDefenderFilter('地')" id="defenderBtn-地">地</button>
-          <button class="secondary btn-sm" onclick="toggleDefenderFilter('風')" id="defenderBtn-風">風</button>
-          <button class="secondary btn-sm" onclick="toggleDefenderFilter('武器')" id="defenderBtn-武器">武器</button>
-          <button class="secondary btn-sm" onclick="toggleDefenderFilter('防具')" id="defenderBtn-防具">防具</button>
-          <button class="secondary btn-sm" onclick="toggleDefenderFilter('道具')" id="defenderBtn-道具">道具</button>
-          <button class="secondary btn-sm" onclick="toggleDefenderFilter('巻物')" id="defenderBtn-巻物">巻物</button>
+        <div style="display:flex;gap:.2rem;margin-bottom:.3rem;flex-wrap:wrap">
+          <button class="secondary btn-sm" onclick="toggleDefenderFilter('無')" id="defenderBtn-無" style="font-size:.7rem;padding:.2rem .3rem">無</button>
+          <button class="secondary btn-sm" onclick="toggleDefenderFilter('火')" id="defenderBtn-火" style="font-size:.7rem;padding:.2rem .3rem">火</button>
+          <button class="secondary btn-sm" onclick="toggleDefenderFilter('水')" id="defenderBtn-水" style="font-size:.7rem;padding:.2rem .3rem">水</button>
+          <button class="secondary btn-sm" onclick="toggleDefenderFilter('地')" id="defenderBtn-地" style="font-size:.7rem;padding:.2rem .3rem">地</button>
+          <button class="secondary btn-sm" onclick="toggleDefenderFilter('風')" id="defenderBtn-風" style="font-size:.7rem;padding:.2rem .3rem">風</button>
+          <button class="secondary btn-sm" onclick="toggleDefenderFilter('武器')" id="defenderBtn-武器" style="font-size:.7rem;padding:.2rem .3rem">武器</button>
+          <button class="secondary btn-sm" onclick="toggleDefenderFilter('防具')" id="defenderBtn-防具" style="font-size:.7rem;padding:.2rem .3rem">防具</button>
+          <button class="secondary btn-sm" onclick="toggleDefenderFilter('道具')" id="defenderBtn-道具" style="font-size:.7rem;padding:.2rem .3rem">道具</button>
+          <button class="secondary btn-sm" onclick="toggleDefenderFilter('巻物')" id="defenderBtn-巻物" style="font-size:.7rem;padding:.2rem .3rem">巻物</button>
         </div>
-         <div id="defenderSearchResults" class="card-grid" style="max-height:600px;overflow-y:auto;margin-bottom:.5rem"></div>
-        <label>使用するカードを選択</label>
-        <div id="defenderSelected" style="margin-bottom:.5rem"></div>
+        <div id="defenderSearchResults" class="card-grid" style="max-height:100px;overflow-y:auto;margin-bottom:.2rem"></div>
+        <div style="font-size:.7rem;color:#aaa;margin-bottom:.2rem">使用:</div>
+        <div id="defenderSelected" style="margin-bottom:.3rem"></div>
       </div>
-      <div style="display:flex;flex-direction:column;gap:.5rem">
-        <div style="background:#0f3460;border-radius:6px;padding:.6rem">
-          <div style="font-size:.75rem;color:#aaa;margin-bottom:.3rem">領地レベル</div>
-          <div style="display:flex;gap:.5rem;margin-bottom:.5rem" id="defenderLandButtons">
-            <button class="secondary btn-sm" onclick="setDefenderLand(1)" data-lv="1">Lv1</button>
-            <button class="secondary btn-sm" onclick="setDefenderLand(2)" data-lv="2">Lv2</button>
-            <button class="secondary btn-sm" onclick="setDefenderLand(3)" data-lv="3">Lv3</button>
-            <button class="secondary btn-sm" onclick="setDefenderLand(4)" data-lv="4">Lv4</button>
-            <button class="secondary btn-sm" onclick="setDefenderLand(5)" data-lv="5">Lv5</button>
+      <div style="display:flex;flex-direction:column;gap:.3rem">
+        <div style="background:#0f3460;border-radius:4px;padding:.4rem">
+          <div style="display:flex;gap:.3rem;align-items:center;margin-bottom:.2rem">
+            <span style="font-size:.7rem;color:#aaa;white-space:nowrap">領地Lv</span>
+            <div style="display:flex;gap:.2rem;flex-wrap:wrap" id="defenderLandButtons">
+              <button class="secondary btn-sm" onclick="setDefenderLand(1)" data-lv="1" style="font-size:.7rem;padding:.15rem .3rem">Lv1</button>
+              <button class="secondary btn-sm" onclick="setDefenderLand(2)" data-lv="2" style="font-size:.7rem;padding:.15rem .3rem">Lv2</button>
+              <button class="secondary btn-sm" onclick="setDefenderLand(3)" data-lv="3" style="font-size:.7rem;padding:.15rem .3rem">Lv3</button>
+              <button class="secondary btn-sm" onclick="setDefenderLand(4)" data-lv="4" style="font-size:.7rem;padding:.15rem .3rem">Lv4</button>
+              <button class="secondary btn-sm" onclick="setDefenderLand(5)" data-lv="5" style="font-size:.7rem;padding:.15rem .3rem">Lv5</button>
+            </div>
           </div>
-          <div style="font-size:.75rem;color:#aaa;margin-bottom:.3rem">土地属性</div>
-          <div style="display:flex;gap:.5rem;margin-bottom:.5rem" id="defenderLandAttrButtons">
-            <button class="secondary btn-sm" onclick="setDefenderLandAttr('火')" data-attr="火">火</button>
-            <button class="secondary btn-sm" onclick="setDefenderLandAttr('水')" data-attr="水">水</button>
-            <button class="secondary btn-sm" onclick="setDefenderLandAttr('地')" data-attr="地">地</button>
-            <button class="secondary btn-sm" onclick="setDefenderLandAttr('風')" data-attr="風">風</button>
-            <button class="secondary btn-sm" onclick="setDefenderLandAttr('無')" data-attr="無">無</button>
+          <div style="display:flex;gap:.3rem;align-items:center">
+            <span style="font-size:.7rem;color:#aaa;white-space:nowrap">属性</span>
+            <div style="display:flex;gap:.2rem;flex-wrap:wrap" id="defenderLandAttrButtons">
+              <button class="secondary btn-sm" onclick="setDefenderLandAttr('火')" data-attr="火" style="font-size:.7rem;padding:.15rem .3rem">火</button>
+              <button class="secondary btn-sm" onclick="setDefenderLandAttr('水')" data-attr="水" style="font-size:.7rem;padding:.15rem .3rem">水</button>
+              <button class="secondary btn-sm" onclick="setDefenderLandAttr('地')" data-attr="地" style="font-size:.7rem;padding:.15rem .3rem">地</button>
+              <button class="secondary btn-sm" onclick="setDefenderLandAttr('風')" data-attr="風" style="font-size:.7rem;padding:.15rem .3rem">風</button>
+              <button class="secondary btn-sm" onclick="setDefenderLandAttr('無')" data-attr="無" style="font-size:.7rem;padding:.15rem .3rem">無</button>
+            </div>
           </div>
         </div>
-        <div id="invasionResult" class="result-box"></div>
-        <button class="action" onclick="resolveInvasion()" style="width:100%;font-size:1.1rem">戦闘結果を表示</button>
+        <div id="invasionResult" class="result-box" style="font-size:.8rem;padding:.5rem"></div>
+        <button class="action" onclick="resolveInvasion()" style="width:100%;font-size:.9rem;padding:.4rem">戦闘結果を表示</button>
       </div>
     </div>
   </div>
@@ -1264,7 +1268,7 @@ function resolveInvasion(){
         <div style="font-size:.65rem;color:#aaa;margin-top:.2rem">使用: ${[...defenderSelected].map(id=>{const c=getDB().find(x=>x.id==id);return c?c.name:'?';}).join(' + ')||'なし'}</div>
       </div>
     </div>
-    <div style="margin-top:.8rem;font-size:1rem;color:#ffd700;text-align:center"><strong>${resultText}</strong></div>
+    <div style="margin-top:.5rem;font-size:.9rem;color:#ffd700;text-align:center"><strong>${resultText}</strong></div>
   `;
 }
 
