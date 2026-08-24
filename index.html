@@ -87,9 +87,9 @@ th{background:#0f3460;color:#e94560}
     <nav>
       <button class="nav-btn active" data-target="book">ブック管理</button>
       <button class="nav-btn" data-target="cards">カード一覧</button>
-      <button class="nav-btn" data-target="expected">期待値計算(未作成)</button>
       <button class="nav-btn" data-target="invasion1">侵略シミュ1</button>
       <button class="nav-btn" data-target="invasion2">侵略シミュ2</button>
+      <button class="nav-btn" data-target="expected">期待値計算(未作成)</button>
     </nav>
   </div>
 </header>
@@ -996,6 +996,7 @@ function setupInvasion2DropZone(el,type,category){
       else if(category==='items'){if(!invasion2DefenderItems.find(x=>x.id===card.id))invasion2DefenderItems.push(card);}
     }
     renderInvasion2DropZones();
+    resolveInvasion2();
   });
 }
 
@@ -1017,6 +1018,7 @@ function removeInvasion2Card(cardId){
   if(invasion2DefenderCreature&&invasion2DefenderCreature.id==cardId)invasion2DefenderCreature=null;
   invasion2DefenderItems=invasion2DefenderItems.filter(x=>x.id!=cardId);
   renderInvasion2DropZones();
+  resolveInvasion2();
 }
 
 function setInvasion2Land(lv){
@@ -1024,6 +1026,7 @@ function setInvasion2Land(lv){
   document.querySelectorAll('#invasion2LandButtons button').forEach(b=>{
     b.style.background=parseInt(b.dataset.lv)===lv?'#e94560':'#0f3460';
   });
+  resolveInvasion2();
 }
 
 function setInvasion2LandAttr(attr){
@@ -1031,6 +1034,7 @@ function setInvasion2LandAttr(attr){
   document.querySelectorAll('#invasion2LandAttrButtons button').forEach(b=>{
     b.style.background=b.dataset.attr===attr?'#e94560':'#0f3460';
   });
+  resolveInvasion2();
 }
 
 function resolveInvasion2(){
