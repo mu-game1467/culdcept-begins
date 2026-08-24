@@ -289,7 +289,7 @@ th{background:#0f3460;color:#e94560}
             </div>
           </div>
         </div>
-        <div id="invasionResult" class="result-box" style="font-size:.8rem;padding:.5rem"></div>
+        <div id="invasionResult" class="result-box" style="max-height:55vh;overflow-y:auto"></div>
         <button class="action" onclick="resolveInvasion()" style="width:100%;font-size:.9rem;padding:.4rem">戦闘結果を表示</button>
       </div>
     </div>
@@ -752,8 +752,12 @@ function getBookCards(){
 
 function renderInvaderSearch(){
   let cards=getDB().filter(c=>c.type!=='スペル');
-  if(invaderFilter==='無'||invaderFilter==='火'||invaderFilter==='水'||invaderFilter==='地'||invaderFilter==='風')cards=cards.filter(c=>c.type==='クリーチャー'&&c.element===invaderFilter);
-  if(invaderFilter==='武器'||invaderFilter==='防具'||invaderFilter==='道具'||invaderFilter==='巻物')cards=cards.filter(c=>c.type==='アイテム'&&c.item_category===invaderFilter);
+  if(invaderFilter!=='__none__'){
+    if(invaderFilter==='無'||invaderFilter==='火'||invaderFilter==='水'||invaderFilter==='地'||invaderFilter==='風')cards=cards.filter(c=>c.type==='クリーチャー'&&c.element===invaderFilter);
+    if(invaderFilter==='武器'||invaderFilter==='防具'||invaderFilter==='道具'||invaderFilter==='巻物')cards=cards.filter(c=>c.type==='アイテム'&&c.item_category===invaderFilter);
+  } else {
+    cards=[];
+  }
   document.getElementById('invaderSearchResults').innerHTML=cards.map(c=>{
     const sel=invaderSelected.has(c.id);
     return `<div class="game-card ${getCardClass(c.type)}" onclick="toggleInvaderSelect(${c.id})" style="cursor:pointer;border:2px solid ${sel?'#ffd700':'#0f3460'}">
@@ -767,8 +771,12 @@ function renderInvaderSearch(){
 
 function renderDefenderSearch(){
   let cards=getDB().filter(c=>c.type!=='スペル');
-  if(defenderFilter==='無'||defenderFilter==='火'||defenderFilter==='水'||defenderFilter==='地'||defenderFilter==='風')cards=cards.filter(c=>c.type==='クリーチャー'&&c.element===defenderFilter);
-  if(defenderFilter==='武器'||defenderFilter==='防具'||defenderFilter==='道具'||defenderFilter==='巻物')cards=cards.filter(c=>c.type==='アイテム'&&c.item_category===defenderFilter);
+  if(defenderFilter!=='__none__'){
+    if(defenderFilter==='無'||defenderFilter==='火'||defenderFilter==='水'||defenderFilter==='地'||defenderFilter==='風')cards=cards.filter(c=>c.type==='クリーチャー'&&c.element===defenderFilter);
+    if(defenderFilter==='武器'||defenderFilter==='防具'||defenderFilter==='道具'||defenderFilter==='巻物')cards=cards.filter(c=>c.type==='アイテム'&&c.item_category===defenderFilter);
+  } else {
+    cards=[];
+  }
   document.getElementById('defenderSearchResults').innerHTML=cards.map(c=>{
     const sel=defenderSelected.has(c.id);
     return `<div class="game-card ${getCardClass(c.type)}" onclick="toggleDefenderSelect(${c.id})" style="cursor:pointer;border:2px solid ${sel?'#ffd700':'#0f3460'}">
@@ -863,16 +871,20 @@ let defenderLand=1;let defenderLandAttr='';
 let invaderFilter='';let defenderFilter='';
 
 function toggleInvaderFilter(val){
-  if(invaderFilter===val){invaderFilter='';}else{invaderFilter=val;}
+  if(invaderFilter===val){invaderFilter='__none__';}else{invaderFilter=val;}
   document.querySelectorAll('[id^="invaderBtn-"]').forEach(b=>{
-    b.style.background=b.id==='invaderBtn-'+invaderFilter?'#e94560':'#0f3460';
+    const isActive=b.id==='invaderBtn-'+invaderFilter;
+    const isNone=invaderFilter==='__none__';
+    b.style.background=(isActive||isNone)?'#e94560':'#0f3460';
   });
   renderInvaderSearch();
 }
 function toggleDefenderFilter(val){
-  if(defenderFilter===val){defenderFilter='';}else{defenderFilter=val;}
+  if(defenderFilter===val){defenderFilter='__none__';}else{defenderFilter=val;}
   document.querySelectorAll('[id^="defenderBtn-"]').forEach(b=>{
-    b.style.background=b.id==='defenderBtn-'+defenderFilter?'#e94560':'#0f3460';
+    const isActive=b.id==='defenderBtn-'+defenderFilter;
+    const isNone=defenderFilter==='__none__';
+    b.style.background=(isActive||isNone)?'#e94560':'#0f3460';
   });
   renderDefenderSearch();
 }
@@ -1220,55 +1232,53 @@ function resolveInvasion(){
   
   function cardDetailHTML(c){
     const effects=getDisplayEffects(c);
-    const showEffects=effects.slice(0,2).map(e=>`<li>${e}</li>`).join('');
+    const showEffects=effects.slice(0,1).map(e=>`<li>${e}</li>`).join('');
     return `
-    ${c.icon?`<img src="https://appmedia.jp${c.icon}" style="width:40px;height:40px;object-fit:contain;background:#0f3460;border-radius:4px;margin-bottom:.3rem" loading="lazy">`:''}
-    <div style="font-size:.65rem;font-weight:bold;color:#fff;margin-bottom:.2rem">${getCardIcon(c.type)} ${c.name}</div>
-    <div style="font-size:.55rem;color:#aaa;margin-bottom:.15rem"><span class="tag tag-${getCardClass(c.type)}" style="font-size:.5rem;padding:.05rem .2rem">${c.type}</span> <span class="tag tag-rarity" style="font-size:.5rem;padding:.05rem .2rem">${c.rare}</span></div>
-    ${c.type==='クリーチャー'?`<div style="font-size:.6rem;color:#ccc;margin-bottom:.2rem">AT${c.at} / HP${c.hp}</div>`:''}
-    ${showEffects?`<div style="font-size:.55rem;color:#aaa"><ul style="padding-left:.8rem;margin-top:.1rem">${showEffects}</ul></div>`:''}
+    ${c.icon?`<img src="https://appmedia.jp${c.icon}" style="width:30px;height:30px;object-fit:contain;background:#0f3460;border-radius:4px;margin-bottom:.2rem" loading="lazy">`:''}
+    <div style="font-size:.6rem;font-weight:bold;color:#fff;margin-bottom:.1rem">${getCardIcon(c.type)} ${c.name}</div>
+    <div style="font-size:.5rem;color:#aaa;margin-bottom:.1rem"><span class="tag tag-${getCardClass(c.type)}" style="font-size:.45rem;padding:.03rem .15rem">${c.type}</span> <span class="tag tag-rarity" style="font-size:.45rem;padding:.03rem .15rem">${c.rare}</span></div>
+    ${c.type==='クリーチャー'?`<div style="font-size:.55rem;color:#ccc;margin-bottom:.1rem">AT${c.at} / HP${c.hp}</div>`:''}
+    ${showEffects?`<div style="font-size:.5rem;color:#aaa"><ul style="padding-left:.6rem;margin-top:.05rem">${showEffects}</ul></div>`:''}
   `;
   }
   
   result.innerHTML=`
-    <div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:.5rem;justify-content:center">
-      <div style="font-size:.7rem;color:#aaa;width:100%;text-align:center">侵略者: ${[...invaderSelected].map(id=>{const c=getDB().find(x=>x.id==id);return c?c.name:'?';}).join(' + ')||'未選択'}</div>
-      <div style="font-size:.7rem;color:#aaa;width:100%;text-align:center">防衛者: ${[...defenderSelected].map(id=>{const c=getDB().find(x=>x.id==id);return c?c.name:'?';}).join(' + ')||'未選択'}</div>
+    <div style="display:flex;gap:.3rem;margin-bottom:.3rem;font-size:.65rem;color:#aaa;justify-content:center">
+      <span>侵略者: ${[...invaderSelected].map(id=>{const c=getDB().find(x=>x.id==id);return c?c.name:'?';}).join(' + ')||'未選択'}</span>
+      <span>防衛者: ${[...defenderSelected].map(id=>{const c=getDB().find(x=>x.id==id);return c?c.name:'?';}).join(' + ')||'未選択'}</span>
     </div>
-    <div class="vs-box">
-      <div class="battle-creature">
-        <div style="color:#e94560;font-weight:bold;font-size:.8rem">侵略者</div>
-        <div style="font-size:1.1rem;margin:.3rem 0">${inv?inv.name:'なし'}${invFusedCreature&&invFusedCreature.id!==invCreature?.id?' <span style="font-size:.8rem;color:#ffd700">('+invFusedCreature.name+')</span>':''}</div>
-        <div style="font-size:.8rem">${inv?`AT ${inv.damage} / HP ${inv.hp}`:'クリーチャー未選択'}</div>
-        ${invEffects?`<div style="font-size:.65rem;color:#aaa;margin-top:.2rem;text-align:left">${invEffects}</div>`:''}
-        ${destroyedInvItems.length?`<div style="font-size:.65rem;color:#e94560;margin-top:.2rem">アイテム破壊：${destroyedInvItems.map(i=>i.name).join(', ')}</div>`:''}
-        ${destroyedInvSupport.length?`<div style="font-size:.65rem;color:#e94560;margin-top:.2rem">援護破壊：${destroyedInvSupport.map(s=>s.name).join(', ')}</div>`:''}
-        <div style="margin-top:.4rem;display:flex;gap:.3rem;flex-wrap:nowrap;overflow-x:auto;justify-content:center;padding-bottom:.2rem">
-          ${invFusedCreature&&invFusedCreature.id!==invCreature?.id?`<div style="background:#0f3460;border:1px solid #ffd700;border-radius:4px;padding:.3rem;min-width:80px;max-width:120px">${cardDetailHTML(invFusedCreature)}</div>`:''}
-          ${!invFusedCreature||invFusedCreature.id===invCreature?.id?`${invCreature?`<div style="background:#0f3460;border:1px solid #0f3460;border-radius:4px;padding:.3rem;min-width:80px;max-width:120px">${cardDetailHTML(invCreature)}</div>`:''}`:''}
-          ${invSupport.map(s=>`<div style="background:#0f3460;border:1px solid #4e9af1;border-radius:4px;padding:.3rem;min-width:80px;max-width:120px">${cardDetailHTML(s)}</div>`).join('')}
-          ${invItems.map(item=>`<div style="background:#0f3460;border:1px solid #0f3460;border-radius:4px;padding:.3rem;min-width:80px;max-width:120px">${cardDetailHTML(item)}</div>`).join('')}
+    <div style="display:grid;grid-template-columns:1fr auto 1fr;gap:.3rem;align-items:start">
+      <div style="background:#16213e;border:1px solid #0f3460;border-radius:4px;padding:.4rem">
+        <div style="color:#e94560;font-weight:bold;font-size:.7rem;text-align:center">侵略者</div>
+        <div style="font-size:.9rem;text-align:center;margin:.2rem 0">${inv?inv.name:'なし'}${invFusedCreature&&invFusedCreature.id!==invCreature?.id?' <span style="font-size:.7rem;color:#ffd700">('+invFusedCreature.name+')</span>':''}</div>
+        <div style="font-size:.7rem;text-align:center">${inv?`AT ${inv.damage} / HP ${inv.hp}`:'未選択'}</div>
+        ${invEffects?`<div style="font-size:.55rem;color:#aaa;margin-top:.15rem;text-align:left">${invEffects}</div>`:''}
+        ${destroyedInvItems.length?`<div style="font-size:.55rem;color:#e94560;margin-top:.15rem">破壊: ${destroyedInvItems.map(i=>i.name).join(', ')}</div>`:''}
+        ${destroyedInvSupport.length?`<div style="font-size:.55rem;color:#e94560;margin-top:.15rem">援護破壊: ${destroyedInvSupport.map(s=>s.name).join(', ')}</div>`:''}
+        <div style="margin-top:.3rem;display:flex;gap:.2rem;flex-wrap:wrap;justify-content:center">
+          ${invFusedCreature&&invFusedCreature.id!==invCreature?.id?`<div style="background:#0f3460;border:1px solid #ffd700;border-radius:3px;padding:.2rem">${cardDetailHTML(invFusedCreature)}</div>`:''}
+          ${!invFusedCreature||invFusedCreature.id===invCreature?.id?`${invCreature?`<div style="background:#0f3460;border:1px solid #0f3460;border-radius:3px;padding:.2rem">${cardDetailHTML(invCreature)}</div>`:''}`:''}
+          ${invSupport.map(s=>`<div style="background:#0f3460;border:1px solid #4e9af1;border-radius:3px;padding:.2rem">${cardDetailHTML(s)}</div>`).join('')}
+          ${invItems.map(item=>`<div style="background:#0f3460;border:1px solid #0f3460;border-radius:3px;padding:.2rem">${cardDetailHTML(item)}</div>`).join('')}
         </div>
-        <div style="font-size:.65rem;color:#aaa;margin-top:.2rem">使用: ${[...invaderSelected].map(id=>{const c=getDB().find(x=>x.id==id);return c?c.name:'?';}).join(' + ')||'なし'}</div>
       </div>
-      <div style="font-size:1.2rem;color:#e94560;font-weight:bold;text-align:center">VS</div>
-      <div class="battle-creature">
-        <div style="color:#4e9af1;font-weight:bold;font-size:.8rem">防衛者</div>
-        <div style="font-size:1.1rem;margin:.3rem 0">${def?def.name:'なし'}${defFusedCreature&&defFusedCreature.id!==defCreature?.id?' <span style="font-size:.8rem;color:#ffd700">('+defFusedCreature.name+')</span>':''}</div>
-        <div style="font-size:.8rem">${def?`AT ${def.damage} / HP ${def.hp} (領地Lv${defenderLand})`:'クリーチャー未選択'}</div>
-        ${defEffects?`<div style="font-size:.65rem;color:#aaa;margin-top:.2rem;text-align:left">${defEffects}</div>`:''}
-        ${destroyedDefItems.length?`<div style="font-size:.65rem;color:#e94560;margin-top:.2rem">アイテム破壊：${destroyedDefItems.map(i=>i.name).join(', ')}</div>`:''}
-        ${destroyedDefSupport.length?`<div style="font-size:.65rem;color:#e94560;margin-top:.2rem">援護破壊：${destroyedDefSupport.map(s=>s.name).join(', ')}</div>`:''}
-        <div style="margin-top:.4rem;display:flex;gap:.3rem;flex-wrap:nowrap;overflow-x:auto;justify-content:center;padding-bottom:.2rem">
-          ${defFusedCreature&&defFusedCreature.id!==defCreature?.id?`<div style="background:#0f3460;border:1px solid #ffd700;border-radius:4px;padding:.3rem;min-width:80px;max-width:120px">${cardDetailHTML(defFusedCreature)}</div>`:''}
-          ${!defFusedCreature||defFusedCreature.id===defCreature?.id?`${defCreature?`<div style="background:#0f3460;border:1px solid #0f3460;border-radius:4px;padding:.3rem;min-width:80px;max-width:120px">${cardDetailHTML(defCreature)}</div>`:''}`:''}
-          ${defSupport.map(s=>`<div style="background:#0f3460;border:1px solid #4e9af1;border-radius:4px;padding:.3rem;min-width:80px;max-width:120px">${cardDetailHTML(s)}</div>`).join('')}
-          ${defItems.map(item=>`<div style="background:#0f3460;border:1px solid #0f3460;border-radius:4px;padding:.3rem;min-width:80px;max-width:120px">${cardDetailHTML(item)}</div>`).join('')}
+      <div style="font-size:1rem;color:#e94560;font-weight:bold;text-align:center;padding-top:1.5rem">VS</div>
+      <div style="background:#16213e;border:1px solid #0f3460;border-radius:4px;padding:.4rem">
+        <div style="color:#4e9af1;font-weight:bold;font-size:.7rem;text-align:center">防衛者</div>
+        <div style="font-size:.9rem;text-align:center;margin:.2rem 0">${def?def.name:'なし'}${defFusedCreature&&defFusedCreature.id!==defCreature?.id?' <span style="font-size:.7rem;color:#ffd700">('+defFusedCreature.name+')</span>':''}</div>
+        <div style="font-size:.7rem;text-align:center">${def?`AT ${def.damage} / HP ${def.hp} (Lv${defenderLand})`:'未選択'}</div>
+        ${defEffects?`<div style="font-size:.55rem;color:#aaa;margin-top:.15rem;text-align:left">${defEffects}</div>`:''}
+        ${destroyedDefItems.length?`<div style="font-size:.55rem;color:#e94560;margin-top:.15rem">破壊: ${destroyedDefItems.map(i=>i.name).join(', ')}</div>`:''}
+        ${destroyedDefSupport.length?`<div style="font-size:.55rem;color:#e94560;margin-top:.15rem">援護破壊: ${destroyedDefSupport.map(s=>s.name).join(', ')}</div>`:''}
+        <div style="margin-top:.3rem;display:flex;gap:.2rem;flex-wrap:wrap;justify-content:center">
+          ${defFusedCreature&&defFusedCreature.id!==defCreature?.id?`<div style="background:#0f3460;border:1px solid #ffd700;border-radius:3px;padding:.2rem">${cardDetailHTML(defFusedCreature)}</div>`:''}
+          ${!defFusedCreature||defFusedCreature.id===defCreature?.id?`${defCreature?`<div style="background:#0f3460;border:1px solid #0f3460;border-radius:3px;padding:.2rem">${cardDetailHTML(defCreature)}</div>`:''}`:''}
+          ${defSupport.map(s=>`<div style="background:#0f3460;border:1px solid #4e9af1;border-radius:3px;padding:.2rem">${cardDetailHTML(s)}</div>`).join('')}
+          ${defItems.map(item=>`<div style="background:#0f3460;border:1px solid #0f3460;border-radius:3px;padding:.2rem">${cardDetailHTML(item)}</div>`).join('')}
         </div>
-        <div style="font-size:.65rem;color:#aaa;margin-top:.2rem">使用: ${[...defenderSelected].map(id=>{const c=getDB().find(x=>x.id==id);return c?c.name:'?';}).join(' + ')||'なし'}</div>
       </div>
     </div>
-    <div style="margin-top:.5rem;font-size:.9rem;color:#ffd700;text-align:center"><strong>${resultText}</strong></div>
+    <div style="margin-top:.4rem;font-size:.85rem;color:#ffd700;text-align:center"><strong>${resultText}</strong></div>
   `;
 }
 
