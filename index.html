@@ -1023,22 +1023,22 @@ function setupInvasion2DropZone(el,type,category){
 }
 
 function renderInvasion2DropZones(){
-  const renderCard=(c)=> `<span class="dropped-card" onclick="removeInvasion2Card('${c.id}')">${c.name} ×</span>`;
+  const renderCard=(c,slot)=>`<span class="dropped-card" onclick="removeInvasion2Card('${c.id}','${slot}')">${c.name} ×</span>`;
   const invC=document.getElementById('invasion2InvaderCreature');
   const invI=document.getElementById('invasion2InvaderItems');
   const defC=document.getElementById('invasion2DefenderCreature');
   const defI=document.getElementById('invasion2DefenderItems');
-  if(invC)invC.innerHTML=invasion2InvaderCreature?renderCard(invasion2InvaderCreature):'ドロップ';
-  if(invI)invI.innerHTML=invasion2InvaderItems.length?invasion2InvaderItems.map(renderCard).join(''):'ドロップ';
-  if(defC)defC.innerHTML=invasion2DefenderCreature?renderCard(invasion2DefenderCreature):'ドロップ';
-  if(defI)defI.innerHTML=invasion2DefenderItems.length?invasion2DefenderItems.map(renderCard).join(''):'ドロップ';
+  if(invC)invC.innerHTML=invasion2InvaderCreature?renderCard(invasion2InvaderCreature,'invaderCreature'):'ドロップ';
+  if(invI)invI.innerHTML=invasion2InvaderItems.length?invasion2InvaderItems.map(c=>renderCard(c,'invaderItems')).join(''):'ドロップ';
+  if(defC)defC.innerHTML=invasion2DefenderCreature?renderCard(invasion2DefenderCreature,'defenderCreature'):'ドロップ';
+  if(defI)defI.innerHTML=invasion2DefenderItems.length?invasion2DefenderItems.map(c=>renderCard(c,'defenderItems')).join(''):'ドロップ';
 }
 
-function removeInvasion2Card(cardId){
-  if(invasion2InvaderCreature&&invasion2InvaderCreature.id==cardId)invasion2InvaderCreature=null;
-  invasion2InvaderItems=invasion2InvaderItems.filter(x=>x.id!=cardId);
-  if(invasion2DefenderCreature&&invasion2DefenderCreature.id==cardId)invasion2DefenderCreature=null;
-  invasion2DefenderItems=invasion2DefenderItems.filter(x=>x.id!=cardId);
+function removeInvasion2Card(cardId,slot){
+  if(slot==='invaderCreature'&&invasion2InvaderCreature&&invasion2InvaderCreature.id==cardId)invasion2InvaderCreature=null;
+  if(slot==='invaderItems')invasion2InvaderItems=invasion2InvaderItems.filter(x=>x.id!=cardId);
+  if(slot==='defenderCreature'&&invasion2DefenderCreature&&invasion2DefenderCreature.id==cardId)invasion2DefenderCreature=null;
+  if(slot==='defenderItems')invasion2DefenderItems=invasion2DefenderItems.filter(x=>x.id!=cardId);
   renderInvasion2DropZones();
   resolveInvasion2();
 }
