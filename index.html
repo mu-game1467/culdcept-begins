@@ -124,6 +124,10 @@ th{background:#0f3460;color:#e94560}
         <input type="text" id="bookName" placeholder="例: 地走り" oninput="onBookNameChange()">
         <button class="action" onclick="saveBook()">保存</button>
         <button class="secondary" onclick="clearBookForm()" style="margin-left:.5rem">クリア</button>
+        <div style="margin-top:.5rem">
+          <label>メモ</label>
+          <textarea id="bookMemo" placeholder="ブックのメモ..." rows="3" style="width:100%;font-size:.8rem;padding:.3rem;background:#16213e;color:#fff;border:1px solid #0f3460;border-radius:3px;resize:vertical" oninput="saveMemo()"></textarea>
+        </div>
       </div>
       <div>
         <label>マナカーブ</label>
@@ -590,14 +594,16 @@ books[name].cards.push(cardId);saveBooks(books);updateManaBar(books[name]);rende
 }
 
 function saveBook(){
-const name=document.getElementById('bookName').value.trim();
-if(!name){alert('ブック名を入力してください');return}
-const books=getBooks();if(!books[name])books[name]={cards:[],created:Date.now()};
-saveBooks(books);updateManaBar(books[name]);renderSavedBooks();alert('保存しました');
+  const name=document.getElementById('bookName').value.trim();
+  if(!name){alert('ブック名を入力してください');return}
+  const books=getBooks();if(!books[name])books[name]={cards:[],created:Date.now(),memo:''};
+  books[name].memo=document.getElementById('bookMemo').value;
+  saveBooks(books);updateManaBar(books[name]);renderSavedBooks();alert('保存しました');
 }
 
 function clearBookForm(){
   document.getElementById('bookName').value='';
+  document.getElementById('bookMemo').value='';
   document.getElementById('manaBar').innerHTML='';
   document.getElementById('totalCards').textContent='0';
   document.getElementById('totalCreatures').textContent='0';
@@ -612,8 +618,10 @@ function renderSavedBooks(){
   container.innerHTML=names.map(n=>{
   const cards=(books[n].cards||[]).map(id=>getDB().find(c=>c.id===id)).filter(Boolean);
   const preview=cards.slice(0,5).map(c=>c.name).join(', ')+(cards.length>5?'...':'');
+  const memo=(books[n].memo||'').trim();
+  const memoPreview=memo?`<br><small style="color:#aaa">${memo.substring(0,30)}${memo.length>30?'...':''}</small>`:'';
   return `<div class="book-item">
-  <div><strong>${n}</strong> <span class="small">(${cards.length}枚)</span><br><small>${preview}</small></div>
+  <div><strong>${n}</strong> <span class="small">(${cards.length}枚)</span><br><small>${preview}</small>${memoPreview}</div>
   <div>
   <button class="secondary btn-sm" onclick="loadBook('${n}')">読込</button>
   <button class="secondary btn-sm" onclick="deleteBook('${n}')" style="margin-left:.3rem;background:#c0392b">削除</button>
@@ -839,12 +847,22 @@ function renderDefenderSearch(){
 
 function loadBook(name){
   document.getElementById('bookName').value=name;
-  const books=getBooks();updateManaBar(books[name]||{cards:[]});
+  const books=getBooks();
+  document.getElementById('bookMemo').value=books[name]?.memo||'';
+  updateManaBar(books[name]||{cards:[]});
   renderBook();renderBookCards();
 }
 
 function onBookNameChange(){
   renderBook();renderBookCards();
+}
+function saveMemo(){
+  const name=document.getElementById('bookName').value.trim();
+  if(!name)return;
+  const books=getBooks();
+  if(!books[name])return;
+  books[name].memo=document.getElementById('bookMemo').value;
+  saveBooks(books);
 }
 
 function deleteBook(name){
