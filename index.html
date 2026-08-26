@@ -648,6 +648,7 @@ function addToCurrentBook(cardId){
   if(!books[name])books[name]={cards:[],created:Date.now()};
   const card=getDB().find(c=>c.id===cardId);
   if(!card)return;
+  if(card.id===198||card.id===199){alert('このカードはブックに入れることができません');return}
   const current=books[name].cards.filter(id=>id===cardId).length;
   const max=isECard(card)?1:4;
   if(current>=max){alert('このカードは既に上限に達しています');return}
