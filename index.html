@@ -1158,7 +1158,7 @@ function resolveInvasion2(){
         fx.push(`<span style="color:#2ecc71">${s.name}の援護 AT+${s.at||0} HP+${s.hp||0}</span>`);
       });
     }
-    let useMagic=false;let magicDamage=0;let totalCritical=1;let itemPierce=false;let itemInstantDeath=false;
+    let useMagic=false;let magicDamage=0;let totalCritical=1;let itemPierce=false;let itemInstantDeath=false;let itemScroll=false;
     items.forEach(item=>{
       const info=parseItemEffectInfo(item.effect);
       if(info.type==='magic'){
@@ -1171,6 +1171,7 @@ function resolveInvasion2(){
         if(info.critical){totalCritical*=1.5;fx.push('<span style="color:#ffd700">強打 1.5倍</span>')}
         if(info.pierce){itemPierce=true;fx.push(`<span style="color:#ffd700">${item.name}の貫通</span>`)}
         if(info.instantDeath){itemInstantDeath=true;fx.push('<span style="color:#ffd700">即死</span>')}
+        if(item.item_category==='巻物'){itemScroll=true;fx.push(`<span style="color:#ffd700">${item.name}の巻物</span>`)}
       }
     });
     if(abilities.pierce||itemPierce){fx.push('<span style="color:#ffd700">貫通</span>');}
@@ -1206,7 +1207,7 @@ function resolveInvasion2(){
     }
     const finalDamage=useMagic?Math.floor(magicDamage*totalCritical):Math.floor(at*totalCritical);
     let landHPBonus=0;
-    if(landBonusAllowed && !abilities.pierce && !itemPierce){
+    if(landBonusAllowed && !abilities.pierce && !itemPierce && !abilities.forbidden && !itemScroll){
       if(!invasion2LandAttr||invasion2LandAttr==='無'||creature.element===invasion2LandAttr){
         landHPBonus=invasion2Land*10;
       }
@@ -1218,7 +1219,7 @@ function resolveInvasion2(){
   }
   
   const inv=calcSide(invFusedCreature,invItems,invSupport,defFusedCreature,false,true);
-  const attackerNullifiesLand=inv&&!inv.allNullified&&(inv.useMagic||inv.pierce||inv.abilities.forbidden);
+  const attackerNullifiesLand=inv&&!inv.allNullified&&(inv.useMagic||inv.pierce||inv.abilities.forbidden||(inv.items&&inv.items.some(i=>i.item_category==='巻物')));
   const def=calcSide(defFusedCreature,defItems,defSupport,invFusedCreature,!attackerNullifiesLand,false);
   
   let resultText='';
@@ -1583,7 +1584,7 @@ function resolveInvasion(){
       });
     }
     
-    let useMagic=false;let magicDamage=0;let totalCritical=1;let itemPierce=false;let itemInstantDeath=false;
+    let useMagic=false;let magicDamage=0;let totalCritical=1;let itemPierce=false;let itemInstantDeath=false;let itemScroll=false;
     items.forEach(item=>{
       const info=parseItemEffectInfo(item.effect);
       if(info.type==='magic'){
@@ -1596,6 +1597,7 @@ function resolveInvasion(){
         if(info.critical){totalCritical*=1.5;fx.push(`<span style="color:#ffd700">強打 1.5倍</span>`)}
         if(info.pierce){itemPierce=true;fx.push(`<span style="color:#ffd700">${item.name}の貫通</span>`)}
         if(info.instantDeath){itemInstantDeath=true;fx.push(`<span style="color:#ffd700">${item.name}の即死</span>`)}
+        if(item.item_category==='巻物'){itemScroll=true;fx.push(`<span style="color:#ffd700">${item.name}の巻物</span>`)}
       }
     });
     
@@ -1642,7 +1644,7 @@ function resolveInvasion(){
     const finalDamage=useMagic?Math.floor(magicDamage*totalCritical):Math.floor(at*totalCritical);
     
     let landHPBonus=0;
-    if(landBonusAllowed && !abilities.pierce && !itemPierce){
+    if(landBonusAllowed && !abilities.pierce && !itemPierce && !abilities.forbidden && !itemScroll){
       if(!defenderLandAttr||defenderLandAttr==='無'||creature.element===defenderLandAttr){
         landHPBonus=defenderLand*10;
       }
@@ -1655,7 +1657,7 @@ function resolveInvasion(){
   }
   
   const inv=calcSide(invFusedCreature,invItems,invSupport,defFusedCreature,false,true);
-  const attackerNullifiesLand=inv&&!inv.allNullified&&(inv.useMagic||inv.pierce||inv.abilities.forbidden);
+  const attackerNullifiesLand=inv&&!inv.allNullified&&(inv.useMagic||inv.pierce||inv.abilities.forbidden||(inv.items&&inv.items.some(i=>i.item_category==='巻物')));
   const def=calcSide(defFusedCreature,defItems,defSupport,invFusedCreature,!attackerNullifiesLand,false);
   
    let resultText='';
