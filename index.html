@@ -1131,6 +1131,12 @@ function resolveInvasion2(){
       const fused=getDB().find(c=>c.id===199);
       if(fused)return {...fused,originalCreature:creature,supportCreature:support.find(s=>s.id===40)};
     }
+    const hasBattleGearBeta=support.some(s=>s.id===25);
+    const hasBattleGearAlpha=support.some(s=>s.id===24);
+    if((cid===24 && hasBattleGearBeta)||(cid===25 && hasBattleGearAlpha)){
+      const fused=getDB().find(c=>c.id===198);
+      if(fused)return {...fused,originalCreature:creature,supportCreature:support.find(s=>s.id===(cid===24?25:24))};
+    }
     return creature;
   }
   const invFusedCreature=applyFusion(invCreature,invSupport,destroyedByDef||supportDestroyedByDef,hasSeabons);
@@ -1552,6 +1558,12 @@ function resolveInvasion(){
     if(cid===120 && hasDragonfly){
       const fused=getDB().find(c=>c.id===199);
       if(fused)return {...fused,originalCreature:creature,supportCreature:support.find(s=>s.id===40)};
+    }
+    const hasBattleGearBeta=support.some(s=>s.id===25);
+    const hasBattleGearAlpha=support.some(s=>s.id===24);
+    if((cid===24 && hasBattleGearBeta)||(cid===25 && hasBattleGearAlpha)){
+      const fused=getDB().find(c=>c.id===198);
+      if(fused)return {...fused,originalCreature:creature,supportCreature:support.find(s=>s.id===(cid===24?25:24))};
     }
     return creature;
   }
