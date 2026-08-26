@@ -438,6 +438,13 @@ function parseAbilityBlocks(ability){
   }
   return blocks;
 }
+function cleanText(t){
+  if(!t)return '';
+  return t.replace(/\[am_popup[^\]]*\]/g,'').replace(/\[\/am_popup\]/g,'').replace(/\[([^\]]+)\]/g, (match, p1) => {
+    if(/^[無火水地風]+$/.test(p1)) return '['+p1+']';
+    return '';
+  }).trim();
+}
 function effectiveText(text){
   if(!text||text==='なし')return '';
   return text.replace(/\[am_popup\s+title="([^"]+)"[^\]]*\]([\s\S]*?)\[\/am_popup\]/g,'$1');
