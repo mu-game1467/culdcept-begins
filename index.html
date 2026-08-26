@@ -447,6 +447,14 @@ function splitEffects(text){
 }
 const TYPE_MAP={'クリーチャー':'creature','アイテム':'item','スペル':'spell','領地':'territory'};
 const TYPE_ICON={'クリーチャー':'👹','アイテム':'🎒','スペル':'✨','領地':'🏰'};
+function getItemCategory(c){
+  if(c.type!=='アイテム')return '';
+  if(c.id>=200 && c.id<=228) return '武器';
+  if(c.id>=229 && c.id<=246) return '防具';
+  if(c.id>=247 && c.id<=271) return '道具';
+  if(c.id>=272 && c.id<=280) return '巻物';
+  return '';
+}
 const NORMALIZED= CARDS.map(c=>({...c, typeKey:TYPE_MAP[c.type]||c.type, atk:c.at||0, def:0, race:c.element||'', desc:c.effect||c.ability||'', item_category:getItemCategory(c), restriction:RESTRICTIONS[c.id]||c.restriction||''}));
 function getDB(){
   const r=localStorage.getItem(DB_KEY);
