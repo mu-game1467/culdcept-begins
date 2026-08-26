@@ -445,6 +445,8 @@ function splitEffects(text){
   if(!text)return [];
   return text.split(/\r?\n|<br\s*\/?>/i).map(s=>s.trim()).filter(Boolean);
 }
+const TYPE_MAP={'クリーチャー':'creature','アイテム':'item','スペル':'spell','領地':'territory'};
+const TYPE_ICON={'クリーチャー':'👹','アイテム':'🎒','スペル':'✨','領地':'🏰'};
 const NORMALIZED= CARDS.map(c=>({...c, typeKey:TYPE_MAP[c.type]||c.type, atk:c.at||0, def:0, race:c.element||'', desc:c.effect||c.ability||'', item_category:getItemCategory(c), restriction:RESTRICTIONS[c.id]||c.restriction||''}));
 function getDB(){
   const r=localStorage.getItem(DB_KEY);
@@ -462,6 +464,8 @@ function getDB(){
 function saveDB(c){localStorage.setItem(DB_KEY,JSON.stringify(c))}
 function getBooks(){const r=localStorage.getItem(BOOKS_KEY);return r?JSON.parse(r):{}}
 function saveBooks(b){localStorage.setItem(BOOKS_KEY,JSON.stringify(b))}
+function getCardIcon(t){return TYPE_ICON[t]||'📄'}
+function getCardClass(t){return TYPE_MAP[t]||''}
 function getDisplayEffects(card){
   const abilityBlocks=card.type==='クリーチャー'&&card.ability?parseAbilityBlocks(card.ability):[];
   const effectSource=card.type==='クリーチャー'&&card.effect?card.effect:(card.desc||card.effect||'');
