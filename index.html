@@ -137,12 +137,6 @@ th{background:#0f3460;color:#e94560}
       </div>
     </div>
     <h3 style="margin-top:1.5rem;color:#aaa">保存済みブック</h3>
-    <div style="display:flex;gap:.5rem;margin-bottom:.5rem;align-items:center;flex-wrap:wrap">
-      <input type="text" id="cloudUrl" placeholder="Google Apps Script Web App URL" style="flex:1;min-width:200px;font-size:.8rem;padding:.3rem .5rem;background:#16213e;color:#fff;border:1px solid #0f3460;border-radius:3px">
-      <button class="secondary btn-sm" onclick="cloudUploadBooks()" style="font-size:.8rem;padding:.3rem .6rem">クラウド保存</button>
-      <button class="secondary btn-sm" onclick="cloudDownloadBooks()" style="font-size:.8rem;padding:.3rem .6rem">クラウド読込</button>
-    </div>
-    <div id="cloudStatus" style="font-size:.75rem;color:#aaa;margin-bottom:.3rem"></div>
     <div id="savedBooks"></div>
   </div>
   <div class="panel">
@@ -486,57 +480,8 @@ function getDB(){
   return NORMALIZED;
 }
 function saveDB(c){localStorage.setItem(DB_KEY,JSON.stringify(c))}
-function getBooks(){
-  const r=localStorage.getItem(BOOKS_KEY);
-  if(r)return JSON.parse(r);
-  const cloud=getCloudBooks();
-  if(Object.keys(cloud).length){
-    saveBooks(cloud);
-    return cloud;
-  }
-  return {};
-}
+function getBooks(){const r=localStorage.getItem(BOOKS_KEY);return r?JSON.parse(r):{}}
 function saveBooks(b){localStorage.setItem(BOOKS_KEY,JSON.stringify(b))}
-function getCloudBooks(){
-  const url=document.getElementById('cloudUrl')?.value?.trim();
-  if(!url)return {};
-  return fetchWithTimeout(url,{method:'GET',mode:'cors'}).then(r=>r.ok?r.json():{}).catch(()=>{});
-}
-function cloudUploadBooks(){
-  const url=document.getElementById('cloudUrl')?.value?.trim();
-  const status=document.getElementById('cloudStatus');
-  if(!url){status.textContent='URLを入力してください';status.style.color='#e94560';return;}
-  status.textContent='保存中...';status.style.color='#ffd700';
-  const books=getBooks();
-  fetchWithTimeout(url,{method:'POST',mode:'cors',headers:{'Content-Type':'application/json'},body:JSON.stringify({books})}).then(r=>r.ok?r.json():{}).then(d=>{
-    if(d.status==='ok'){status.textContent='保存しました ('+d.count+'冊)';status.style.color='#2ecc71';}
-    else{status.textContent='エラー: '+(d.message||'unknown');status.style.color='#e94560';}
-  }).catch(e=>{status.textContent='通信エラー: '+e.message;status.style.color='#e94560';});
-}
-function cloudDownloadBooks(){
-  const url=document.getElementById('cloudUrl')?.value?.trim();
-  const status=document.getElementById('cloudStatus');
-  if(!url){status.textContent='URLを入力してください';status.style.color='#e94560';return;}
-  status.textContent='読込中...';status.style.color='#ffd700';
-  getCloudBooks().then(cloud=>{
-    if(Object.keys(cloud).length){
-      const books=getBooks();
-      for(const name in cloud){
-        if(!books[name])books[name]=cloud[name];
-      }
-      saveBooks(books);
-      renderSavedBooks();
-      status.textContent='読込ました ('+Object.keys(cloud).length+'冊追加)';status.style.color='#2ecc71';
-    } else {status.textContent='クラウドにデータがありません';status.style.color='#aaa';}
-  }).catch(e=>{status.textContent='通信エラー: '+e.message;status.style.color='#e94560';});
-}
-function fetchWithTimeout(url,options){
-  return new Promise((resolve,reject)=>{
-    const controller=new AbortController();
-    const timeout=setTimeout(()=>reject(new Error('timeout')),15000);
-    fetch(url,{...options,signal:controller.signal}).then(r=>{clearTimeout(timeout);resolve(r);}).catch(e=>{clearTimeout(timeout);reject(e);});
-  });
-}
 function getCardIcon(t){return TYPE_ICON[t]||'📄'}
 function getCardClass(t){return TYPE_MAP[t]||''}
 function getDisplayEffects(card){
