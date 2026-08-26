@@ -1219,8 +1219,8 @@ function resolveInvasion2(){
       const invUseMagic=inv&&inv.useMagic;
       const invForbidden=inv&&inv.abilities&&inv.abilities.forbidden;
       if(defAttackReflect && !invUseMagic && !invForbidden){
-        const reflectedDamage=inv.damage||0;
-        if(reflectedDamage>=inv.hp){
+        const reflectedDamage=inv?inv.damage||0:0;
+        if(!inv||reflectedDamage>=inv.hp){
           resultText='<span style="color:#e94560">● 侵略失敗</span>';
         } else {
           resultText='<span style="color:#e94560">● 侵略失敗</span>';
@@ -1229,7 +1229,9 @@ function resolveInvasion2(){
         const defFirstStrike=def&&def.abilities&&def.abilities.firstStrike;
         const invFirstStrike=inv&&inv.abilities&&inv.abilities.firstStrike;
         if(defFirstStrike&&!invFirstStrike){
-          if(def.damage>=inv.hp){
+          if(!inv){
+            resultText='<span style="color:#e94560">● 侵略失敗</span>';
+          } else if(def.damage>=inv.hp){
             resultText='<span style="color:#e94560">● 侵略失敗</span>';
           } else if(inv.damage>=def.hp){
             resultText='<span style="color:#2ecc71">● 侵略成功</span>';
@@ -1237,7 +1239,9 @@ function resolveInvasion2(){
             resultText='<span style="color:#e94560">● 侵略失敗</span>';
           }
         } else {
-          if(inv.damage>=def.hp){
+          if(!inv){
+            resultText='<span style="color:#e94560">● 侵略失敗</span>';
+          } else if(inv.damage>=def.hp){
             resultText='<span style="color:#2ecc71">● 侵略成功</span>';
           } else {
             resultText='<span style="color:#e94560">● 侵略失敗</span>';
@@ -1652,8 +1656,8 @@ function resolveInvasion(){
       const invUseMagic=inv&&inv.useMagic;
       const invForbidden=inv&&inv.abilities&&inv.abilities.forbidden;
       if(defAttackReflect && !invUseMagic && !invForbidden){
-        const reflectedDamage=inv.damage||0;
-        if(reflectedDamage>=inv.hp){
+        const reflectedDamage=inv?inv.damage||0:0;
+        if(!inv||reflectedDamage>=inv.hp){
           resultText=`<span style="color:#e94560">● 侵略失敗</span>`;
         } else {
           resultText=`<span style="color:#e94560">● 侵略失敗</span>`;
@@ -1662,7 +1666,9 @@ function resolveInvasion(){
         const defFirstStrike=def&&def.abilities&&def.abilities.firstStrike;
         const invFirstStrike=inv&&inv.abilities&&inv.abilities.firstStrike;
         if(defFirstStrike&&!invFirstStrike){
-          if(def.damage>=inv.hp){
+          if(!inv){
+            resultText=`<span style="color:#e94560">● 侵略失敗</span>`;
+          } else if(def.damage>=inv.hp){
             resultText=`<span style="color:#e94560">● 侵略失敗</span>`;
           } else if(inv.damage>=def.hp){
             resultText=`<span style="color:#2ecc71">● 侵略成功</span>`;
@@ -1670,7 +1676,9 @@ function resolveInvasion(){
             resultText=`<span style="color:#e94560">● 侵略失敗</span>`;
           }
         } else {
-          if(inv.damage>=def.hp){
+          if(!inv){
+            resultText=`<span style="color:#e94560">● 侵略失敗</span>`;
+          } else if(inv.damage>=def.hp){
             resultText=`<span style="color:#2ecc71">● 侵略成功</span>`;
           } else {
             resultText=`<span style="color:#e94560">● 侵略失敗</span>`;
