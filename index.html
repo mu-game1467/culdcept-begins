@@ -1022,10 +1022,16 @@ function invasion2CardClick(cardId){
   if(category==='creature' && card.type!=='クリーチャー')return;
   if(type==='invader'){
     if(category==='creature'){invasion2InvaderCreature=card;}
-    else if(category==='items'){if(!invasion2InvaderItems.find(x=>x.id===card.id))invasion2InvaderItems.push(card);}
+    else if(category==='items'){
+      if(invasion2InvaderItems.length>=1){alert('アイテムは1つのみ装備できます');return}
+      if(!invasion2InvaderItems.find(x=>x.id===card.id))invasion2InvaderItems.push(card);
+    }
   } else {
     if(category==='creature'){invasion2DefenderCreature=card;}
-    else if(category==='items'){if(!invasion2DefenderItems.find(x=>x.id===card.id))invasion2DefenderItems.push(card);}
+    else if(category==='items'){
+      if(invasion2DefenderItems.length>=1){alert('アイテムは1つのみ装備できます');return}
+      if(!invasion2DefenderItems.find(x=>x.id===card.id))invasion2DefenderItems.push(card);
+    }
   }
   activeDropZone=null;
   document.querySelectorAll('.drop-zone').forEach(z=>z.style.borderColor='');
@@ -1044,10 +1050,16 @@ function setupInvasion2DropZone(el,type,category){
     if(category==='creature' && card.type!=='クリーチャー')return;
     if(type==='invader'){
       if(category==='creature'){invasion2InvaderCreature=card;}
-      else if(category==='items'){if(!invasion2InvaderItems.find(x=>x.id===card.id))invasion2InvaderItems.push(card);}
+      else if(category==='items'){
+        if(invasion2InvaderItems.length>=1){alert('アイテムは1つのみ装備できます');return}
+        if(!invasion2InvaderItems.find(x=>x.id===card.id))invasion2InvaderItems.push(card);
+      }
     } else {
       if(category==='creature'){invasion2DefenderCreature=card;}
-      else if(category==='items'){if(!invasion2DefenderItems.find(x=>x.id===card.id))invasion2DefenderItems.push(card);}
+      else if(category==='items'){
+        if(invasion2DefenderItems.length>=1){alert('アイテムは1つのみ装備できます');return}
+        if(!invasion2DefenderItems.find(x=>x.id===card.id))invasion2DefenderItems.push(card);
+      }
     }
     renderInvasion2DropZones();
     resolveInvasion2();
