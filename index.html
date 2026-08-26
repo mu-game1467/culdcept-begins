@@ -446,6 +446,8 @@ function splitEffects(text){
   if(!text)return [];
   return text.split(/\r?\n|<br\s*\/?>/i).map(s=>s.trim()).filter(Boolean);
 }
+const DB_KEY='culdcept_begins_db';const BOOKS_KEY='culdcept_begins_books';
+const SIDE_PRESETS_KEY='culdcept_side_presets';
 const TYPE_MAP={'クリーチャー':'creature','アイテム':'item','スペル':'spell','領地':'territory'};
 const TYPE_ICON={'クリーチャー':'👹','アイテム':'🎒','スペル':'✨','領地':'🏰'};
 function getItemCategory(c){
